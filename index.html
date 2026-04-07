@@ -247,32 +247,38 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);m
     <div style="font-size:22px;font-weight:600;color:var(--text);margin-bottom:4px">GovFlow</div>
     <div style="font-size:12px;color:var(--text-muted)">Secretaria Municipal de Cultura e Turismo</div>
   </div>
-  <div style="background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:32px;width:320px;box-shadow:0 20px 60px rgba(0,0,0,.6)">
-    <div style="font-size:14px;font-weight:500;margin-bottom:20px;text-align:center">Quem é você?</div>
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <button class="login-btn" data-user="Fabiana" onclick="doLogin('Fabiana')" style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--surface2);border:1px solid var(--border2);border-radius:12px;cursor:pointer;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;transition:all .15s" onmouseover="this.style.background='var(--surface3)'" onmouseout="this.style.background='var(--surface2)'">
-        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#3B82F6,#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0">FA</div>
-        <span>Fabiana</span>
-      </button>
-      <button class="login-btn" data-user="Hicaro" onclick="doLogin('Hicaro')" style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--surface2);border:1px solid var(--border2);border-radius:12px;cursor:pointer;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;transition:all .15s" onmouseover="this.style.background='var(--surface3)'" onmouseout="this.style.background='var(--surface2)'">
-        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#0D9488,#3B82F6);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0">HI</div>
-        <span>Hicaro</span>
-      </button>
-      <button class="login-btn" data-user="Karina" onclick="doLogin('Karina')" style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--surface2);border:1px solid var(--border2);border-radius:12px;cursor:pointer;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;transition:all .15s" onmouseover="this.style.background='var(--surface3)'" onmouseout="this.style.background='var(--surface2)'">
-        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#EC4899,#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0">KA</div>
-        <span>Karina</span>
-      </button>
-      <button class="login-btn" data-user="Manoel" onclick="doLogin('Manoel')" style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--surface2);border:1px solid var(--border2);border-radius:12px;cursor:pointer;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;transition:all .15s" onmouseover="this.style.background='var(--surface3)'" onmouseout="this.style.background='var(--surface2)'">
-        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#F59E0B,#EF4444);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0">MA</div>
-        <span>Manoel</span>
-      </button>
+
+  <!-- STEP 1: Escolher usuário -->
+  <div id="login-step1" style="background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:28px 32px;width:480px;max-width:96vw;box-shadow:0 20px 60px rgba(0,0,0,.6)">
+    <div style="font-size:13px;font-weight:500;margin-bottom:20px;text-align:center;color:var(--text-muted);letter-spacing:.4px;text-transform:uppercase">Quem é você?</div>
+    <div id="login-step1-users" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px"></div>
+  </div>
+
+  <!-- STEP 2: Inserir senha -->
+  <div id="login-step2" style="display:none;background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:32px;width:320px;box-shadow:0 20px 60px rgba(0,0,0,.6)">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px">
+      <div id="login-avatar" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;flex-shrink:0"></div>
+      <div>
+        <div id="login-username" style="font-size:15px;font-weight:500"></div>
+        <div style="font-size:12px;color:var(--text-muted)">Digite sua senha</div>
+      </div>
+    </div>
+    <div style="position:relative;margin-bottom:10px">
+      <input id="login-password" type="password" placeholder="Senha" class="form-input" style="font-size:15px;letter-spacing:2px;padding-right:44px"
+        onkeydown="if(event.key==='Enter')confirmLogin()"
+        autocomplete="current-password">
+      <button onclick="toggleSenhaLogin()" id="btn-show-pw" title="Mostrar/ocultar senha"
+        style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--text-muted);padding:4px">👁</button>
+    </div>
+    <div id="login-error" style="display:none;font-size:12px;color:var(--red-light);margin-bottom:10px;text-align:center">❌ Senha incorreta</div>
+    <button onclick="confirmLogin()" style="width:100%;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif">Entrar</button>
+    <div style="display:flex;justify-content:space-between;margin-top:8px">
+      <button onclick="backToUsers()" style="padding:8px 0;background:transparent;color:var(--text-muted);border:none;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif">← Voltar</button>
+      <button onclick="abrirRecuperarSenha()" style="padding:8px 0;background:transparent;color:var(--accent-light);border:none;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif">Esqueci minha senha</button>
     </div>
   </div>
+
   <div style="font-size:11px;color:var(--text-faint);margin-top:24px;text-align:center">GovFlow — Prefeitura Municipal de São Carlos</div>
-  <div id="firebase-warning" style="display:none;margin-top:16px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:10px;padding:12px 16px;max-width:340px;font-size:11px;color:var(--amber-light);line-height:1.6">
-    ⚠ <strong>Firebase não configurado.</strong><br>
-    Abra o arquivo HTML, localize o bloco <code>firebaseConfig</code> e substitua os valores pelas suas credenciais do Firebase Console.
-  </div>
 </div>
 
 <!-- ALERT OVERLAY - shown when task is overdue for current user -->
@@ -285,6 +291,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);m
     <button onclick="dismissAlertOverlay()" style="margin-top:20px;padding:10px 28px;background:var(--red);color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif">OK, vou resolver agora</button>
   </div>
 </div>
+
 
 <!-- SIDEBAR -->
 <nav class="sidebar" id="sidebar">
@@ -303,8 +310,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);m
       <button class="nav-item" onclick="showPage('kanban',this)"><span class="nav-icon">⊞</span> Quadro Kanban</button>
     </div>
     <div class="nav-section">
-      <div class="nav-label">Processos</div>
-      <button class="nav-item" onclick="showPage('processos',this)"><span class="nav-icon">◎</span> Processos <span class="nav-badge amber" id="badge-processos" style="display:none">0</span></button>
+      <div class="nav-label">Administrativo</div>
       <button class="nav-item" onclick="showPage('editais',this)"><span class="nav-icon">◈</span> Editais <span class="nav-badge blue" id="badge-editais" style="display:none">0</span></button>
       <button class="nav-item" onclick="showPage('contratos',this)"><span class="nav-icon">📃</span> Contratos <span class="nav-badge teal" id="badge-contratos" style="display:none">0</span></button>
     </div>
@@ -313,6 +319,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);m
       <button class="nav-item" onclick="showPage('agenda',this)"><span class="nav-icon">📅</span> Minha Agenda</button>
       <button class="nav-item" style="color:var(--teal-light)" onclick="window.open('https://webmail.saocarlos.sp.gov.br/','_blank')"><span class="nav-icon">✉</span> Webmail</button>
       <button class="nav-item" style="color:var(--teal-light)" onclick="window.open('https://cidadao.saocarlos.sp.gov.br/','_blank')"><span class="nav-icon">📄</span> Novo Ofício</button>
+      <button class="nav-item" style="color:var(--teal-light)" onclick="window.open('https://scarlos.giap.com.br/','_blank')"><span class="nav-icon">🔄</span> GIAP Online</button>
+      <button class="nav-item" style="color:var(--amber-light)" onclick="window.open('https://manuais-procedimentos.netlify.app/','_blank')"><span class="nav-icon">📚</span> Manuais de Proc.</button>
       <button class="nav-item" onclick="showPage('dfd',this)"><span class="nav-icon">📋</span> Elaborar DFD</button>
     </div>
     <div class="nav-section">
@@ -336,7 +344,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);m
         <div style="font-size:12px;font-weight:500;color:var(--text)" id="topbar-username">—</div>
         <div style="display:flex;align-items:center;gap:8px">
           <span id="sync-status" style="font-size:10px;color:var(--teal-light)">● aguardando login</span>
-          <button onclick="doLogout()" style="font-size:10px;color:var(--text-faint);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;padding:0">Trocar usuário</button>
+          <button onclick="doLogout()" style="font-size:11px;color:#fff;background:rgba(239,68,68,.25);border:1px solid rgba(239,68,68,.35);border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;padding:3px 10px;font-weight:500">⏻ Sair</button>
+          <button onclick="abrirMinhaSenha()" style="font-size:10px;color:var(--text-muted);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;padding:0">🔑 Senha</button>
+          <button id="btn-admin-senhas" onclick="abrirGerenciarSenhas()" style="display:none;font-size:10px;color:var(--teal-light);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;padding:0">🔐 Senhas</button>
+          <button id="btn-admin-equipe" onclick="abrirGerenciarEquipe()" style="display:none;font-size:10px;color:var(--teal-light);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;padding:0">👥 Equipe</button>
         </div>
       </div>
       <div class="avatar" id="topbar-avatar" title="Usuário">—</div>
@@ -450,89 +461,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);m
     </div>
   </div>
 
-  <!-- GIAP -->
-  <!-- PROCESSOS PAGE -->
-  <div class="page" id="page-processos">
-    <div class="page-content">
-      <div class="section-header">
-        <div><div class="section-title">Controle de Processos</div><div class="section-sub" id="processos-count-label">carregando...</div></div>
-        <div style="margin-left:auto;display:flex;gap:10px">
-          <button class="btn btn-pdf" onclick="exportPDF('processos')">↓ PDF</button>
-          <button class="btn btn-primary" onclick="openModal('modal-new-processo')">+ Novo Processo</button>
-        </div>
-      </div>
-      <!-- FILTERS -->
-      <div class="filters" id="processos-filters">
-        <button class="filter-btn active" data-filter="todos" onclick="filterProcessos(this,'todos')">Todos</button>
-        <button class="filter-btn" data-filter="em_tramitacao" onclick="filterProcessos(this,'em_tramitacao')">Em Tramitação</button>
-        <button class="filter-btn" data-filter="aguardando" onclick="filterProcessos(this,'aguardando')">Aguardando</button>
-        <button class="filter-btn" data-filter="concluido" onclick="filterProcessos(this,'concluido')">Concluídos</button>
-        <button class="filter-btn" data-filter="cancelado" onclick="filterProcessos(this,'cancelado')">Cancelados</button>
-        <button class="filter-btn" data-filter="arquivado" onclick="filterProcessos(this,'arquivado')">Arquivados</button>
-      </div>
-      <!-- TABLE -->
-      <div class="panel" style="overflow-x:auto">
-        <table class="data-table" style="min-width:800px">
-          <thead><tr>
-            <th style="width:110px">Nº / Ano</th>
-            <th>Descrição</th>
-            <th style="width:110px">1ª Tramitação</th>
-            <th style="width:90px">Tipo</th>
-            <th style="width:110px">Status</th>
-            <th style="width:120px">Alerta Pagto</th>
-            <th style="width:90px">Criado por</th>
-            <th style="width:90px"></th>
-          </tr></thead>
-          <tbody id="processos-table-body">
-            <tr class="no-results"><td colspan="8">Nenhum processo cadastrado.</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- PROCESSO DETALHE PAGE -->
-  <div class="page" id="page-processo-detalhe">
-    <div class="page-content">
-      <div class="section-header">
-        <div>
-          <div class="section-title" id="pd-title">Processo</div>
-          <div class="section-sub" id="pd-subtitle"></div>
-        </div>
-        <div style="margin-left:auto;display:flex;gap:10px">
-          <button class="btn btn-ghost" onclick="showPage('processos',null)">← Voltar</button>
-          <button class="btn btn-ghost" style="color:var(--red-light);border-color:rgba(239,68,68,.2)" onclick="deleteProcesso(currentProcessoId);showPage('processos',null)">✕ Excluir</button>
-        </div>
-      </div>
-      <!-- STATUS + INFO -->
-      <div style="display:grid;grid-template-columns:1fr 280px;gap:20px">
-        <div>
-          <div id="pd-status-badge" style="display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap"></div>
-          <!-- UNIFIED TIMELINE -->
-          <div id="pd-tab-content"></div>
-          <!-- COMPRA/PAGAMENTO SECTION (collapsible) -->
-          <div id="pd-compra-section" style="margin-top:24px;display:none">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer" onclick="toggleCompraPainel()">
-              <div style="flex:1;height:1px;background:var(--border)"></div>
-              <span style="font-size:12px;font-weight:600;color:var(--text-muted);white-space:nowrap;padding:0 10px;display:flex;align-items:center;gap:6px">
-                💰 Compra / Pagamento <span id="compra-toggle-icon">▼</span>
-              </span>
-              <div style="flex:1;height:1px;background:var(--border)"></div>
-            </div>
-            <div id="pd-compra-inner"></div>
-          </div>
-        </div>
-        <!-- RIGHT PANEL -->
-        <div>
-          <div class="panel" style="margin-bottom:14px">
-            <div class="panel-header"><span>📋</span><span class="panel-title">Dados do Processo</span></div>
-            <div id="pd-info" style="padding:14px 18px"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div class="page" id="page-editais">
     <div class="page-content">
       <div class="section-header">
@@ -581,10 +509,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);m
         <input class="form-input" id="audit-search" type="text" placeholder="🔍 Buscar..." style="width:200px;padding:7px 12px" oninput="renderAuditLog()">
         <select class="form-select" id="audit-user-filter" style="width:150px" onchange="renderAuditLog()">
           <option value="todos">Todos os usuários</option>
-          <option value="Fabiana">Fabiana</option>
-          <option value="Hicaro">Hicaro</option>
-          <option value="Karina">Karina</option>
-          <option value="Manoel">Manoel</option>
         </select>
         <select class="form-select" id="audit-module-filter" style="width:150px" onchange="renderAuditLog()">
           <option value="todos">Todos os módulos</option>
@@ -721,28 +645,37 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);m
       <!-- FILTERS -->
       <div class="filters" id="contratos-filters">
         <button class="filter-btn active" data-cof="todos" onclick="filterContratos(this,'todos')">Todos</button>
-        <button class="filter-btn" data-cof="vigente" onclick="filterContratos(this,'vigente')">Vigentes</button>
-        <button class="filter-btn" data-cof="vencendo" onclick="filterContratos(this,'vencendo')">⚠ Vencendo (30d)</button>
+        <button class="filter-btn" data-cof="vigente" onclick="filterContratos(this,'vigente')">✓ Vigentes</button>
+        <button class="filter-btn" data-cof="atencao" onclick="filterContratos(this,'atencao')">⏰ Atenção (90d)</button>
+        <button class="filter-btn" data-cof="urgente" onclick="filterContratos(this,'urgente')">⚠ Urgente (60d)</button>
+        <button class="filter-btn" data-cof="critico" onclick="filterContratos(this,'critico')">🚨 Crítico (30d)</button>
         <button class="filter-btn" data-cof="encerrado" onclick="filterContratos(this,'encerrado')">Encerrados</button>
+        <button class="filter-btn" data-cof="arquivado" onclick="filterContratos(this,'arquivado')">📁 Arquivados</button>
       </div>
       <!-- TABLE -->
       <div class="panel" style="overflow-x:auto">
         <table class="data-table" style="min-width:1000px">
-          <thead><tr>
-            <th style="width:110px">Processo</th>
-            <th style="width:90px">Contrato</th>
-            <th>Objeto</th>
-            <th style="width:160px">Entidade/Empresa</th>
-            <th style="width:100px">Secretaria</th>
-            <th style="width:90px">Assinatura</th>
-            <th style="width:110px">Vigência</th>
-            <th style="width:120px">Valor Total</th>
-            <th style="width:85px">Realiz.</th>
-            <th style="width:85px">Status</th>
-            <th style="width:60px"></th>
-          </tr></thead>
+          <thead>
+            <tr>
+              <th style="width:60px;text-align:center">Contrato</th>
+              <th style="width:50px;text-align:center">Ano</th>
+              <th style="width:80px;text-align:center">Secretaria</th>
+              <th style="width:90px;text-align:center">Processo</th>
+              <th style="width:160px">Entidade / Empresa</th>
+              <th>Objeto</th>
+              <th style="width:180px">Fundamento</th>
+              <th style="width:85px;text-align:center">Assinatura</th>
+              <th style="width:90px;text-align:center">Vigência</th>
+              <th style="width:120px;text-align:right">Valor Contratual<br><span style="font-weight:400;font-size:10px">(com aditamentos)</span></th>
+              <th style="width:70px;text-align:center">Realizado<br>(%)</th>
+              <th style="width:70px;text-align:center">A realizar<br>(%)</th>
+              <th style="width:110px;text-align:right">Total pago<br>(R$)</th>
+              <th style="width:110px;text-align:right">Saldo a pagar<br>(R$)</th>
+              <th style="width:55px"></th>
+            </tr>
+          </thead>
           <tbody id="contratos-table-body">
-            <tr class="no-results"><td colspan="11">Nenhum contrato cadastrado.</td></tr>
+            <tr class="no-results"><td colspan="15" style="text-align:center;padding:32px;color:var(--text-muted);font-style:italic">Nenhum contrato cadastrado.</td></tr>
           </tbody>
         </table>
       </div>
@@ -831,7 +764,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);m
       <div class="form-group"><label class="form-label">Nome da Tarefa <span class="req">*</span></label><input class="form-input" id="t-nome" type="text" placeholder="Descreva a tarefa..."></div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Responsável <span class="req">*</span></label>
-          <select class="form-select" id="t-resp">
+          <select class="form-select resp-select" id="t-resp">
             <option>Fabiana</option><option>Hicaro</option><option>Karina</option><option>Manoel</option>
           </select>
         </div>
@@ -865,7 +798,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);m
       <div class="form-group"><label class="form-label">Nome da Tarefa <span class="req">*</span></label><input class="form-input" id="et-nome" type="text"></div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Responsável</label>
-          <select class="form-select" id="et-resp">
+          <select class="form-select resp-select" id="et-resp">
             <option>Fabiana</option><option>Hicaro</option><option>Karina</option><option>Manoel</option>
           </select>
         </div>
@@ -985,152 +918,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);m
   </div>
 </div>
 
-<!-- Modal Tramitação -->
-<div class="modal-overlay" id="modal-tramitacao">
-  <div class="modal" style="width:580px">
-    <div class="modal-header"><span>🔄</span><span class="modal-title">Registrar Tramitação</span><button class="modal-close" onclick="closeModal('modal-tramitacao')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">De (Secretaria atual) <span class="req">*</span></label><input class="form-input" id="tr-de" type="text" placeholder="Secretaria de origem"></div>
-        <div class="form-group"><label class="form-label">Para (Próxima secretaria) <span class="req">*</span></label><input class="form-input" id="tr-para" type="text" placeholder="Secretaria destino"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Data da Tramitação <span class="req">*</span></label><input class="form-input" id="tr-data" type="date"></div>
-        <div class="form-group"><label class="form-label">Prazo de Resposta</label><input class="form-input" id="tr-prazo" type="date"></div>
-      </div>
-      <div class="form-group"><label class="form-label">Observação</label><textarea class="form-textarea" id="tr-obs" placeholder="Descreva a ação tomada..."></textarea></div>
-      <div class="form-group"><label class="form-label">Necessita cobrança?</label>
-        <select class="form-select" id="tr-cobranca" onchange="trToggleCobranca()">
-          <option value="nao">Não</option><option value="sim">Sim — agendar lembrete</option>
-        </select>
-      </div>
-      <div class="form-group extra-field" id="tr-cobranca-prazo-group">
-        <label class="form-label">Cobrar em quantos dias úteis?</label>
-        <select class="form-select" id="tr-cobranca-dias">
-          <option value="2">2 dias úteis</option><option value="3" selected>3 dias úteis</option><option value="5">5 dias úteis</option><option value="7">7 dias úteis</option>
-        </select>
-      </div>
-    </div>
-    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-tramitacao')">Cancelar</button><button class="btn btn-primary" onclick="saveTramitacao()">Registrar Tramitação</button></div>
-  </div>
-</div>
-
-<!-- Modal Concluir Processo -->
-<div class="modal-overlay" id="modal-concluir-processo">
-  <div class="modal" style="width:600px">
-    <div class="modal-header"><span>✓</span><span class="modal-title">Concluir Processo</span><button class="modal-close" onclick="closeModal('modal-concluir-processo')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Resultado <span class="req">*</span></label>
-          <select class="form-select" id="cp-resultado" onchange="toggleCpResultado()">
-            <option value="deferido">Deferido</option><option value="indeferido">Indeferido</option>
-          </select>
-        </div>
-        <div class="form-group"><label class="form-label">Data de Conclusão <span class="req">*</span></label><input class="form-input" id="cp-data" type="date"></div>
-      </div>
-      <div class="form-group extra-field" id="cp-motivo-group"><label class="form-label">Motivo do Indeferimento <span class="req">*</span></label><textarea class="form-textarea" id="cp-motivo" placeholder="Descreva o motivo..."></textarea></div>
-      <div class="form-group extra-field visible" id="cp-proximos-group"><label class="form-label">Próximos Passos</label><textarea class="form-textarea" id="cp-proximos" placeholder="Ex: Emitir AF, aguardar nota fiscal..."></textarea></div>
-      <div class="form-group extra-field visible" id="cp-af-group"><label class="form-label">Número da AF (Autorização de Fornecimento)</label><input class="form-input" id="cp-af" type="text" placeholder="Ex: AF 001/2026"></div>
-    </div>
-    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-concluir-processo')">Cancelar</button><button class="btn btn-primary" onclick="saveConclusao()">Concluir Processo</button></div>
-  </div>
-</div>
-
-<!-- Modal Execução / AF -->
-<div class="modal-overlay" id="modal-execucao">
-  <div class="modal" style="width:520px">
-    <div class="modal-header"><span>⚙</span><span class="modal-title">Execução / AF</span><button class="modal-close" onclick="closeModal('modal-execucao')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Número da AF <span class="req">*</span></label><input class="form-input" id="exec-af" type="text" placeholder="Ex: 001"></div>
-        <div class="form-group"><label class="form-label">Ano da AF</label><input class="form-input" id="exec-ano" type="number" value="2026"></div>
-      </div>
-      <div class="form-group"><label class="form-label">Descrição da Execução</label><textarea class="form-textarea" id="exec-descricao" placeholder="Descreva o serviço/produto..."></textarea></div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Data Prev. Conclusão</label><input class="form-input" id="exec-data-fim" type="date"></div>
-        <div class="form-group"><label class="form-label">Status</label>
-          <select class="form-select" id="exec-status">
-            <option value="entregue_fornecedor">Entregue ao Fornecedor</option><option value="servico_executado">Serviço Executado</option><option value="pedido_entregue">Pedido Entregue</option><option value="em_andamento">Em Andamento</option><option value="pendente">Pendente</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group"><label class="form-label">Observações</label><textarea class="form-textarea" id="exec-obs"></textarea></div>
-    </div>
-    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-execucao')">Cancelar</button><button class="btn btn-primary" onclick="saveExecucao()">Salvar</button></div>
-  </div>
-</div>
-
-<!-- Modal Nota Fiscal -->
-<div class="modal-overlay" id="modal-nota-fiscal">
-  <div class="modal" style="width:640px">
-    <div class="modal-header"><span>🧾</span><span class="modal-title">Nota Fiscal</span><button class="modal-close" onclick="closeModal('modal-nota-fiscal')">✕</button></div>
-    <div class="modal-body">
-      <div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Dados do Fornecedor</div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Fornecedor <span class="req">*</span></label><input class="form-input" id="nf-fornecedor" type="text" placeholder="Razão social ou nome"></div>
-        <div class="form-group"><label class="form-label">CNPJ / CPF</label><input class="form-input" id="nf-cnpj" type="text" placeholder="00.000.000/0000-00" data-mask="cnpj"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Banco</label><input class="form-input" id="nf-banco" type="text" placeholder="Ex: Banco do Brasil"></div>
-        <div class="form-group"><label class="form-label">Agência / Conta</label><input class="form-input" id="nf-conta" type="text" placeholder="Ex: 1234-5 / 00012345-6"></div>
-      </div>
-      <div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 10px">Dados da Nota Fiscal</div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Número da NF <span class="req">*</span></label><input class="form-input" id="nf-numero" type="text" placeholder="Ex: 001234"></div>
-        <div class="form-group"><label class="form-label">Valor (R$) <span class="req">*</span></label><input class="form-input" id="nf-valor" type="text" placeholder="Ex: 15.400,00" data-mask="moeda"></div>
-      </div>
-      <div class="form-group"><label class="form-label">Descrição do Serviço / Produto</label><textarea class="form-textarea" id="nf-descricao" placeholder="Descreva o serviço ou produto faturado..."></textarea></div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Data de Emissão</label><input class="form-input" id="nf-emissao" type="date"></div>
-        <div class="form-group"><label class="form-label">Data de Recebimento</label><input class="form-input" id="nf-recebimento" type="date"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Enviado p/ Assinatura</label><input class="form-input" id="nf-envio-assinatura" type="date"></div>
-        <div class="form-group"><label class="form-label">Recebido NF Assinada</label><input class="form-input" id="nf-recebido-assinada" type="date"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Data de Anexação ao Processo</label><input class="form-input" id="nf-anexacao" type="date"></div>
-        <div class="form-group"><label class="form-label">Data de Envio para Pagamento</label><input class="form-input" id="nf-envio-pag" type="date"></div>
-      </div>
-    </div>
-    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-nota-fiscal')">Cancelar</button><button class="btn btn-primary" onclick="saveNotaFiscal()">Salvar Nota Fiscal</button></div>
-  </div>
-</div>
-
-<!-- Modal Pagamento -->
-<div class="modal-overlay" id="modal-pagamento">
-  <div class="modal" style="width:500px">
-    <div class="modal-header"><span>💰</span><span class="modal-title">Registro de Pagamento</span><button class="modal-close" onclick="closeModal('modal-pagamento')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Status do Pagamento <span class="req">*</span></label>
-          <select class="form-select" id="pag-status">
-            <option value="aguardando">Aguardando Pagamento</option><option value="pago">Pago</option>
-          </select>
-        </div>
-        <div class="form-group"><label class="form-label">Data do Pagamento</label><input class="form-input" id="pag-data" type="date"></div>
-      </div>
-      <div class="form-group"><label class="form-label">Valor Pago (R$)</label><input class="form-input" id="pag-valor" type="text" placeholder="Ex: 15.400,00" data-mask="moeda"></div>
-      <div class="form-group"><label class="form-label">Observação</label><textarea class="form-textarea" id="pag-obs" placeholder="Informações adicionais..."></textarea></div>
-    </div>
-    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-pagamento')">Cancelar</button><button class="btn btn-primary" onclick="savePagamento()">Registrar Pagamento</button></div>
-  </div>
-</div>
-
-<!-- Modal Busca GIAP -->
-<div class="modal-overlay" id="modal-giap-search">
-  <div class="modal" style="width:500px">
-    <div class="modal-header"><span>🔍</span><span class="modal-title">Buscar Processo GIAP</span><button class="modal-close" onclick="closeModal('modal-giap-search')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-group"><label class="form-label">Número do Processo</label><input class="form-input" id="search-num" type="text" placeholder="Ex: 4895/2026" oninput="searchGiapLive()"></div>
-      <div class="form-group"><label class="form-label">Assunto / Fornecedor</label><input class="form-input" id="search-assunto" type="text" placeholder="Palavras-chave..." oninput="searchGiapLive()"></div>
-      <div class="form-group"><label class="form-label">Número da Nota Fiscal</label><input class="form-input" id="search-nf" type="text" placeholder="Ex: 001234" oninput="searchGiapLive()"></div>
-      <div id="search-results" style="margin-top:8px;max-height:300px;overflow-y:auto"></div>
-    </div>
-    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-giap-search')">Fechar</button></div>
-  </div>
-</div>
-
 <!-- Modal Nova Compra -->
 <div class="modal-overlay" id="modal-purchase">
   <div class="modal" style="width:620px">
@@ -1172,29 +959,183 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);m
 
 
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 
-// ===== MODO: LOCAL (localStorage) + FIREBASE (quando hospedar no Netlify) =====
-// Para ativar Firebase real: descomente o bloco firebaseConfig abaixo
-// e adicione os scripts do Firebase no <head>
+// ===== PROTEÇÃO DO CÓDIGO-FONTE (apenas admin pode inspecionar) =====
+(function protegerCodigo(){
+  // Bloqueia F12, Ctrl+Shift+I, Ctrl+U, Ctrl+S para não-admins
+  document.addEventListener('keydown', function(e){
+    if(window.currentUser && window.currentUser === window.GF_ADMIN) return; // admin pode
+    // F12
+    if(e.key === 'F12'){ e.preventDefault(); return false; }
+    // Ctrl+Shift+I ou Ctrl+Shift+J (DevTools)
+    if(e.ctrlKey && e.shiftKey && (e.key==='I'||e.key==='i'||e.key==='J'||e.key==='j')){ e.preventDefault(); return false; }
+    // Ctrl+U (view source)
+    if(e.ctrlKey && (e.key==='U'||e.key==='u')){ e.preventDefault(); return false; }
+    // Ctrl+S (save page)
+    if(e.ctrlKey && (e.key==='S'||e.key==='s')){ e.preventDefault(); return false; }
+  });
+  // Bloqueia clique direito para não-admins
+  document.addEventListener('contextmenu', function(e){
+    if(window.currentUser && window.currentUser === window.GF_ADMIN) return;
+    e.preventDefault(); return false;
+  });
+})();
 
-/*
+window.onerror = function(msg, src, line, col, err){
+  console.error('GLOBAL JS ERROR:', msg, 'at line', line);
+  // Show visible error for debugging
+  var div = document.getElementById('__debug_err__');
+  if(!div){ div = document.createElement('div'); div.id='__debug_err__'; div.style.cssText='position:fixed;bottom:0;left:0;right:0;background:red;color:#fff;padding:10px;z-index:99999;font-size:12px;font-family:monospace;max-height:200px;overflow-y:auto'; document.body.appendChild(div); }
+  div.innerHTML += '<div>' + msg + ' (linha ' + line + ')</div>';
+  return false;
+};
+
+// ===== FIREBASE ATIVADO =====
 const firebaseConfig = {
-  apiKey: "COLE_SUA_apiKey_AQUI",
-  authDomain: "COLE_SUA_authDomain_AQUI",
-  projectId: "COLE_SEU_projectId_AQUI",
-  storageBucket: "COLE_SEU_storageBucket_AQUI",
-  messagingSenderId: "COLE_SEU_messagingSenderId_AQUI",
-  appId: "COLE_SEU_appId_AQUI"
+  apiKey: "AIzaSyCtRuGwmpSLGvJDTfz_EkW6ZCG1sRggybo",
+  authDomain: "govflow-saocarlos.firebaseapp.com",
+  projectId: "govflow-saocarlos",
+  storageBucket: "govflow-saocarlos.firebasestorage.app",
+  messagingSenderId: "313229706343",
+  appId: "1:313229706343:web:74f6d6fb39af9d558d00c2"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-*/
 
-const FIREBASE_ENABLED = false; // Mude para true quando configurar Firebase
+const FIREBASE_ENABLED = true;
 
 const COL = { tasks:'tasks', giaps:'giaps', compras:'compras', history:'history', dfd:'dfd' };
 
+// ===== SISTEMA DE SENHAS =====
+// Senhas padrão — sobrescritas pelo localStorage se o admin alterar
+var USER_PASSWORDS_DEFAULT = {
+  'Fabiana': 'fabiana123',
+  'Gustavo': 'gustavo123',
+  'Hicaro':  'hicaro123',
+  'Karina':  'karina123',
+  'Leandro': 'leandro123',
+  'Manoel':  'manoel123',
+  'Mariana': 'mariana123',
+  'Rachel':  'rachel123',
+  'Ricardo': 'ricardo123',
+  'Roberto': 'roberto123',
+  'Valeria': 'valeria123',
+  'Vanessa': 'vanessa123'
+};
+var _SENHA_VERSION = 'v3';
+var USER_PASSWORDS = (function(){
+  try {
+    var ver = localStorage.getItem('gf_pw_version');
+    var saved = localStorage.getItem('gf_user_passwords');
+    // Só usa o salvo se for da versão atual e tiver as 4 chaves
+    if(ver === _SENHA_VERSION && saved) {
+      var obj = JSON.parse(saved);
+      if(obj.Fabiana && obj.Hicaro && obj.Karina && obj.Manoel) return obj;
+    }
+  } catch(e){}
+  // Força reset para os padrões
+  try {
+    localStorage.setItem('gf_pw_version', _SENHA_VERSION);
+    localStorage.removeItem('gf_user_passwords');
+  } catch(e){}
+  return Object.assign({}, USER_PASSWORDS_DEFAULT);
+})();
+
+function abrirGerenciarSenhas(){
+  if(currentUser !== 'Fabiana'){
+    showToast('⚠','Acesso restrito.','Apenas Fabiana pode gerenciar senhas.','rgba(239,68,68,.4)');
+    return;
+  }
+  var users = gfUsers.map(function(u){ return u.name; });
+  var colors = {
+    'Fabiana':'linear-gradient(135deg,#3B82F6,#8B5CF6)',
+    'Hicaro':'linear-gradient(135deg,#0D9488,#3B82F6)',
+    'Karina':'linear-gradient(135deg,#EC4899,#8B5CF6)',
+    'Manoel':'linear-gradient(135deg,#F59E0B,#EF4444)'
+  };
+  var initials = {}; gfUsers.forEach(function(u){ initials[u.name]=u.name.substring(0,2).toUpperCase(); });
+  var container = document.getElementById('senhas-form');
+  if(!container) return;
+  container.innerHTML = users.map(function(u){
+    return '<div style="display:flex;align-items:center;gap:12px">'
+      + '<div style="width:36px;height:36px;border-radius:50%;background:'+colors[u]+';display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0;color:#fff">'+initials[u]+'</div>'
+      + '<div style="flex:1">'
+      + '<div style="font-size:12px;font-weight:500;color:var(--text-muted);margin-bottom:5px">'+u+'</div>'
+      + '<input class="form-input" id="pw-input-'+u+'" type="text" value="'+USER_PASSWORDS[u]+'" placeholder="Nova senha..." autocomplete="off">'
+      + '</div>'
+      + '</div>';
+  }).join('');
+  openModal('modal-senhas');
+}
+
+function salvarSenhas(){
+  var users = gfUsers.map(function(u){ return u.name; });
+  var hasEmpty = false;
+  users.forEach(function(u){
+    var el = document.getElementById('pw-input-'+u);
+    if(el && el.value.trim() === '') hasEmpty = true;
+  });
+  if(hasEmpty){
+    showToast('⚠','Preencha todas as senhas.','Nenhum campo pode ficar vazio.','rgba(245,158,11,.4)');
+    return;
+  }
+  users.forEach(function(u){
+    var el = document.getElementById('pw-input-'+u);
+    if(el) USER_PASSWORDS[u] = el.value.trim().toLowerCase();
+  });
+  try {
+    localStorage.setItem('gf_user_passwords', JSON.stringify(USER_PASSWORDS));
+  } catch(e){}
+  closeModal('modal-senhas');
+  showToast('✓','Senhas atualizadas!','As novas senhas já estão ativas.','rgba(16,185,129,.4)');
+}
+window.abrirGerenciarSenhas = abrirGerenciarSenhas;
+window.salvarSenhas = salvarSenhas;
+var _pendingUser = null;
+
+function selectUser(name, bg, initials) {
+  _pendingUser = name;
+  var step1 = document.getElementById('login-step1');
+  var step2 = document.getElementById('login-step2');
+  if(step1) step1.style.display = 'none';
+  if(step2) step2.style.display = 'block';
+  var av = document.getElementById('login-avatar');
+  if(av){ av.textContent = initials; av.style.background = bg; }
+  var un = document.getElementById('login-username');
+  if(un) un.textContent = name;
+  var pw = document.getElementById('login-password');
+  if(pw){ pw.value = ''; pw.focus(); }
+  var err = document.getElementById('login-error');
+  if(err) err.style.display = 'none';
+}
+
+function confirmLogin() {
+  var pw = document.getElementById('login-password');
+  var err = document.getElementById('login-error');
+  var input = pw ? pw.value : '';
+  var expected = USER_PASSWORDS[_pendingUser] || '';
+  var defaultPw = (_pendingUser||'').toLowerCase() + '123';
+  // Aceita senha exata, case-insensitive, ou senha padrão nome+123
+  var ok = (input === expected) || (input.toLowerCase() === expected.toLowerCase()) || (input.toLowerCase() === defaultPw);
+  if(ok) {
+    doLogin(_pendingUser);
+  } else {
+    if(err) err.style.display = 'block';
+    if(pw){ pw.value = ''; pw.focus(); }
+  }
+}
+
+function backToUsers() {
+  _pendingUser = null;
+  var step1 = document.getElementById('login-step1');
+  var step2 = document.getElementById('login-step2');
+  if(step1) step1.style.display = 'block';
+  if(step2) step2.style.display = 'none';
+}
 
 // doLogin available immediately - before any HTML renders
 var currentUser = null;
@@ -1220,7 +1161,20 @@ function doLogin(name){
   else window._pendingLogin = name;
 }
 // Also expose openModal/closeModal early for nav buttons
-function openModal(id){ var el=document.getElementById(id); if(el) el.classList.add('open'); }
+function openModal(id){ 
+  try {
+    var el=document.getElementById(id); 
+    if(el){ 
+      el.classList.add('open'); 
+    } else {
+      console.error('openModal: element not found: ' + id);
+      alert('Erro: modal "' + id + '" não encontrado. Reporte ao suporte.');
+    }
+  } catch(e){ 
+    console.error('openModal error:', e);
+    alert('Erro ao abrir modal: ' + e.message);
+  }
+}
 function closeModal(id){ var el=document.getElementById(id); if(el) el.classList.remove('open'); }
 function showPage(id,btn){ 
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
@@ -1724,12 +1678,209 @@ let alertIntervals = [];
 let alertOverlayDismissed = false;
 let lastAlertCount = 0;
 let titleFlashInterval = null;
-const userColors = {
-  'Fabiana': {bg:'linear-gradient(135deg,#3B82F6,#8B5CF6)', initials:'FA'},
-  'Hicaro':  {bg:'linear-gradient(135deg,#0D9488,#3B82F6)', initials:'HI'},
-  'Karina':  {bg:'linear-gradient(135deg,#EC4899,#8B5CF6)', initials:'KA'},
-  'Manoel':  {bg:'linear-gradient(135deg,#F59E0B,#EF4444)', initials:'MA'},
+// ===== SISTEMA DINÂMICO DE USUÁRIOS =====
+var GF_ADMIN = 'Fabiana'; // único admin imutável
+
+// Verifica se o usuário atual pode ver a tarefa
+function podeVerTarefa(t){
+  if(!currentUser) return true;
+  if(currentUser === GF_ADMIN) return true; // admin vê tudo
+  return t.resp === currentUser || t.criadoPor === currentUser;
+}
+
+// Paleta de gradientes para novos usuários
+var USER_GRADIENTS = [
+  'linear-gradient(135deg,#3B82F6,#8B5CF6)',
+  'linear-gradient(135deg,#0D9488,#3B82F6)',
+  'linear-gradient(135deg,#EC4899,#8B5CF6)',
+  'linear-gradient(135deg,#F59E0B,#EF4444)',
+  'linear-gradient(135deg,#10B981,#3B82F6)',
+  'linear-gradient(135deg,#8B5CF6,#EC4899)',
+  'linear-gradient(135deg,#F59E0B,#10B981)',
+  'linear-gradient(135deg,#EF4444,#8B5CF6)',
+];
+
+// Usuários padrão (Fabiana é sempre admin e não pode ser removida)
+var GF_USERS_DEFAULT = [
+  {name:'Fabiana',  bg:'linear-gradient(135deg,#3B82F6,#8B5CF6)'},
+  {name:'Gustavo',  bg:'linear-gradient(135deg,#F59E0B,#10B981)'},
+  {name:'Hicaro',   bg:'linear-gradient(135deg,#0D9488,#3B82F6)'},
+  {name:'Karina',   bg:'linear-gradient(135deg,#EC4899,#8B5CF6)'},
+  {name:'Leandro',  bg:'linear-gradient(135deg,#6366F1,#0D9488)'},
+  {name:'Manoel',   bg:'linear-gradient(135deg,#F59E0B,#EF4444)'},
+  {name:'Mariana',  bg:'linear-gradient(135deg,#EC4899,#F59E0B)'},
+  {name:'Rachel',   bg:'linear-gradient(135deg,#8B5CF6,#EC4899)'},
+  {name:'Ricardo',  bg:'linear-gradient(135deg,#0D9488,#6366F1)'},
+  {name:'Roberto',  bg:'linear-gradient(135deg,#EF4444,#F59E0B)'},
+  {name:'Valeria',  bg:'linear-gradient(135deg,#3B82F6,#EC4899)'},
+  {name:'Vanessa',  bg:'linear-gradient(135deg,#10B981,#3B82F6)'},
+];
+
+// Carrega usuários do localStorage ou usa padrão
+function loadGFUsers(){
+  try{
+    var s = localStorage.getItem('gf_equipe');
+    if(s){
+      var arr = JSON.parse(s);
+      if(arr && arr.length && arr.find(u=>u.name===GF_ADMIN)) return arr;
+    }
+  }catch(e){}
+  return GF_USERS_DEFAULT.slice();
+}
+function saveGFUsers(arr){
+  try{ localStorage.setItem('gf_equipe', JSON.stringify(arr)); }catch(e){}
+}
+
+var gfUsers = loadGFUsers();
+
+// userColors compatível com código existente (calculado dinamicamente)
+var userColors = {};
+function rebuildUserColors(){
+  userColors = {};
+  gfUsers.forEach(function(u){
+    userColors[u.name] = {
+      bg: u.bg,
+      initials: u.name.substring(0,2).toUpperCase()
+    };
+  });
+}
+rebuildUserColors();
+
+// Renderiza os botões de login dinamicamente
+function renderLoginButtons(){
+  var container = document.getElementById('login-step1-users');
+  if(!container) return;
+  var sorted = gfUsers.slice().sort(function(a,b){ return a.name.localeCompare(b.name,'pt-BR'); });
+  var html = '';
+  sorted.forEach(function(u){
+    var ini = u.name.substring(0,2).toUpperCase();
+    // Short name: first word only, max 9 chars
+    var label = u.name.split(' ')[0];
+    if(label.length > 9) label = label.substring(0,9);
+    html += '<button class="login-btn" data-user="'+u.name+'" data-bg="'+u.bg+'" data-ini="'+ini+'"'
+      + ' style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 8px 14px;background:var(--surface2);border:1px solid var(--border2);border-radius:12px;cursor:pointer;color:var(--text);font-family:DM Sans,sans-serif;transition:all .15s;width:100%">'
+      + '<div style="width:48px;height:48px;border-radius:50%;background:'+u.bg+';display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:#fff;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,.3)">'+ini+'</div>'
+      + '<span style="font-size:12px;font-weight:500;text-align:center;line-height:1.2;color:var(--text)">'+label+'</span>'
+      + '</button>';
+  });
+  container.innerHTML = html;
+  container.querySelectorAll('.login-btn').forEach(function(btn){
+    btn.addEventListener('mouseover', function(){
+      this.style.background='var(--surface3)';
+      this.style.borderColor='var(--accent)';
+      this.style.transform='translateY(-2px)';
+    });
+    btn.addEventListener('mouseout', function(){
+      this.style.background='var(--surface2)';
+      this.style.borderColor='var(--border2)';
+      this.style.transform='translateY(0)';
+    });
+    btn.addEventListener('click', function(){
+      selectUser(this.dataset.user, this.dataset.bg, this.dataset.ini);
+    });
+  });
+}
+
+// Popula selects de responsável dinamicamente
+function populateRespSelects(){
+  var opts = gfUsers.map(u=>'<option value="'+u.name+'">'+u.name+'</option>').join('');
+  document.querySelectorAll('.resp-select').forEach(function(sel){
+    var cur = sel.value;
+    sel.innerHTML = opts;
+    if(cur) sel.value = cur;
+  });
+  // Audit user filter
+  var auditSel = document.getElementById('audit-user-filter');
+  if(auditSel){
+    var cur = auditSel.value;
+    auditSel.innerHTML = '<option value="todos">Todos os usuários</option>'
+      + gfUsers.map(u=>'<option value="'+u.name+'">'+u.name+'</option>').join('');
+    if(cur) auditSel.value = cur;
+  }
+}
+
+// Gerenciar equipe (admin only)
+window.abrirGerenciarEquipe = function(){
+  if(currentUser !== GF_ADMIN){
+    showToast('⚠','Acesso restrito.','Apenas '+GF_ADMIN+' pode gerenciar a equipe.','rgba(239,68,68,.4)');
+    return;
+  }
+  renderEquipeModal();
+  openModal('modal-equipe');
 };
+
+function renderEquipeModal(){
+  var container = document.getElementById('equipe-lista');
+  if(!container) return;
+  var html = '';
+  gfUsers.forEach(function(u){
+    var ini = u.name.substring(0,2).toUpperCase();
+    var isAdmin = u.name === GF_ADMIN;
+    var senha = USER_PASSWORDS[u.name] || '—';
+    html += '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">';
+    html += '<div style="width:38px;height:38px;border-radius:50%;background:'+u.bg+';display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#fff;flex-shrink:0">'+ini+'</div>';
+    html += '<div style="flex:1">';
+    html += '<div style="font-size:13.5px;font-weight:500">'+u.name;
+    if(isAdmin) html += ' <span style="font-size:10px;background:rgba(59,130,246,.2);color:var(--accent-light);padding:1px 7px;border-radius:10px;margin-left:4px">Admin</span>';
+    html += '</div>';
+    html += '<div style="font-size:11px;color:var(--text-muted)">Senha: <code style="background:var(--surface3);padding:1px 5px;border-radius:4px">'+senha+'</code></div>';
+    html += '</div>';
+    if(isAdmin){
+      html += '<span style="font-size:11px;color:var(--text-faint)">Admin do sistema</span>';
+    } else {
+      html += '<button data-rmuser="'+u.name+'" style="padding:5px 10px;background:rgba(239,68,68,.15);color:var(--red-light);border:1px solid rgba(239,68,68,.2);border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit">✕ Remover</button>';
+    }
+    html += '</div>';
+  });
+  container.innerHTML = html;
+  // Attach click events after innerHTML set
+  container.querySelectorAll('[data-rmuser]').forEach(function(btn){
+    btn.addEventListener('click', function(){ removerUsuario(this.getAttribute('data-rmuser')); });
+  });
+}
+
+window.removerUsuario = function(nome){
+  if(nome === GF_ADMIN){ showToast('⚠','Não permitido','O admin não pode ser removido.','rgba(239,68,68,.4)'); return; }
+  if(!confirm('Remover '+nome+' da equipe? As tarefas atribuídas a ele(a) continuarão existindo.')) return;
+  gfUsers = gfUsers.filter(function(u){ return u.name !== nome; });
+  delete USER_PASSWORDS[nome];
+  saveGFUsers(gfUsers);
+  try{ localStorage.setItem('gf_user_passwords', JSON.stringify(USER_PASSWORDS)); }catch(e){}
+  rebuildUserColors();
+  renderLoginButtons();
+  populateRespSelects();
+  renderEquipeModal();
+  showToast('✓',nome+' removido(a) da equipe.','','rgba(16,185,129,.4)');
+  addAudit('removeu','Sistema','Usuário removido: '+nome,'');
+};
+
+window.adicionarUsuario = function(){
+  var nomeEl = document.getElementById('novo-user-nome');
+  var senhaEl = document.getElementById('novo-user-senha');
+  var nome = nomeEl ? nomeEl.value.trim() : '';
+  var senha = senhaEl ? senhaEl.value.trim().toLowerCase() : '';
+  if(!nome){ showToast('⚠','Informe o nome.','','rgba(245,158,11,.4)'); return; }
+  if(!senha){ showToast('⚠','Informe a senha.','','rgba(245,158,11,.4)'); return; }
+  if(gfUsers.find(function(u){ return u.name.toLowerCase()===nome.toLowerCase(); })){
+    showToast('⚠','Usuário já existe.','Escolha um nome diferente.','rgba(245,158,11,.4)'); return;
+  }
+  // Pega próxima cor disponível
+  var bg = USER_GRADIENTS[gfUsers.length % USER_GRADIENTS.length];
+  gfUsers.push({name:nome, bg:bg});
+  USER_PASSWORDS[nome] = senha;
+  saveGFUsers(gfUsers);
+  try{ localStorage.setItem('gf_user_passwords', JSON.stringify(USER_PASSWORDS)); }catch(e){}
+  rebuildUserColors();
+  renderLoginButtons();
+  populateRespSelects();
+  if(nomeEl) nomeEl.value = '';
+  if(senhaEl) senhaEl.value = '';
+  renderEquipeModal();
+  showToast('✓','Usuário '+nome+' adicionado!','Já pode fazer login.','rgba(16,185,129,.4)');
+  addAudit('adicionou','Sistema','Novo usuário: '+nome,'');
+};
+
+// userColors preenchido por rebuildUserColors() — ver acima
 
 // ===== STATUS HELPERS =====
 function getStatusClass(s){
@@ -1778,12 +1929,14 @@ window.showPage = function showPage(id, btn){
     agenda:'Agenda',dfd:'Elaborar DFD','dfd-historico':'Histórico de DFDs'};
   const tEl = document.getElementById('page-title');
   if(tEl) tEl.textContent = titles[id]||id;
+  // Recarrega agenda com dados do usuário atual ao navegar
+  if(id === 'agenda') initCalendar();
 };
 
 // ===== MODALS =====
 window.openModal = function openModal(id){
   const el = document.getElementById(id);
-  if(el) el.classList.add('open');
+  if(el){ el.classList.add('open'); populateRespSelects(); }
 };
 window.closeModal = function closeModal(id){
   const el = document.getElementById(id);
@@ -1814,8 +1967,8 @@ function refreshAll(){
   renderHistory();
   renderGiap();
   renderCompras();
-  const atrasadas = tasks.filter(t=>t.status==='atrasada').length;
-  const totalActive = tasks.filter(t=>t.status!=='concluida').length;
+  const atrasadas = tasks.filter(t=>t.status==='atrasada' && podeVerTarefa(t)).length;
+  const totalActive = tasks.filter(t=>t.status!=='concluida' && podeVerTarefa(t)).length;
   const el = document.getElementById('badge-tarefas');
   if(el){ el.textContent = totalActive; el.style.background = atrasadas>0?'var(--red)':'var(--amber)'; el.style.display = totalActive>0?'inline-flex':'none'; }
   if(currentUser){ updateMyTasksBadge(); updateWelcomeCard(); }
@@ -1825,9 +1978,6 @@ function refreshAll(){
   // Update editais badge
   const editaisBadge = document.getElementById('badge-editais');
   if(editaisBadge){ const n=editais.length; editaisBadge.textContent=n; editaisBadge.style.display=n>0?'inline-flex':'none'; }
-  // Update processos badge - show count of active (non-archived)
-  const procBadge = document.getElementById('badge-processos');
-  if(procBadge){ const n=processos.filter(p=>p.status!=='finalizado'&&p.status!=='arquivado').length; procBadge.textContent=n; procBadge.style.display=n>0?'inline-flex':'none'; }
 }
 
 // ===== LOCAL STORAGE =====
@@ -1839,6 +1989,7 @@ function saveLocal(){
     localStorage.setItem('gf_history',  JSON.stringify(history));
     localStorage.setItem('gf_dfd',      JSON.stringify(dfdHistory));
   }catch(e){ console.warn('localStorage error',e); }
+  // Firebase sync is handled by fbAdd/fbUpdate/fbDelete individually
 }
 function loadLocal(){
   try{
@@ -1849,36 +2000,103 @@ function loadLocal(){
     const d=localStorage.getItem('gf_dfd');      if(d) dfdHistory=JSON.parse(d);
   }catch(e){ console.warn('localStorage load error',e); }
 }
-function startFirebaseListeners(){ loadLocal(); refreshAll(); showSyncStatus('local'); }
 function showSyncStatus(msg, isError){
   const el = document.getElementById('sync-status');
   if(!el) return;
-  el.textContent = (isError?'⚠ ':'💾 ')+msg;
+  el.textContent = (isError?'⚠ ':'● ')+msg;
   el.style.color = isError?'var(--red-light)':'var(--teal-light)';
 }
+
+function startFirebaseListeners(){
+  if(!FIREBASE_ENABLED){ loadLocal(); refreshAll(); showSyncStatus('local'); return; }
+  showSyncStatus('conectando...');
+  const cols = [
+    {name:'tasks',    setter: d=>{ tasks=d; }},
+    {name:'giaps',    setter: d=>{ giaps=d; }},
+    {name:'compras',  setter: d=>{ compras=d; }},
+    {name:'history',  setter: d=>{ history=d; }},
+    {name:'dfd',      setter: d=>{ dfdHistory=d; }},
+    {name:'contratos',setter: d=>{ contratos=d; contratoNextId=Math.max(...d.map(c=>Number(c.id)||0),0)+1; }},
+    {name:'editais',  setter: d=>{ editais=d; }},
+  ];
+  let loaded = 0;
+  cols.forEach(({name, setter})=>{
+    db.collection(name).orderBy('_ts','desc').onSnapshot(snap=>{
+      const data = snap.docs.map(d=>({...d.data(), _fbId:d.id}));
+      setter(data);
+      loaded++;
+      if(loaded>=cols.length){ showSyncStatus('sincronizado ✓'); refreshAll(); }
+      else { refreshAll(); }
+    }, err=>{ console.error(name, err); showSyncStatus('erro sync', true); });
+  });
+}
+
 async function fbAdd(col, data){
-  const id = Date.now()+Math.random();
-  const entry = {...data, _fbId:String(id), id};
-  if(col==='tasks')   tasks.unshift(entry);
-  if(col==='giaps')   giaps.unshift(entry);
-  if(col==='compras') compras.unshift(entry);
-  if(col==='history') history.unshift(entry);
-  if(col==='dfd')     dfdHistory.unshift(entry);
-  saveLocal(); refreshAll(); return {id};
+  if(!FIREBASE_ENABLED){
+    const id = Date.now();
+    const entry = {...data, _fbId:String(id), id, _ts:id};
+    if(col==='tasks')    tasks.unshift(entry);
+    if(col==='giaps')    giaps.unshift(entry);
+    if(col==='compras')  compras.unshift(entry);
+    if(col==='history')  history.unshift(entry);
+    if(col==='dfd')      dfdHistory.unshift(entry);
+    if(col==='contratos')contratos.unshift(entry);
+    if(col==='editais')  editais.unshift(entry);
+    saveLocal(); refreshAll(); return {id};
+  }
+  try{
+    const ts = Date.now();
+    const ref = await db.collection(col).add({...data, _ts:ts});
+    return {id:ref.id, _fbId:ref.id};
+  }catch(e){ console.error('fbAdd',e); showSyncStatus('erro ao salvar',true); }
 }
+
 async function fbUpdate(col, fbId, data){
-  const arr = col==='tasks'?tasks:col==='giaps'?giaps:col==='compras'?compras:[];
-  const idx = arr.findIndex(x=>x._fbId===fbId||String(x.id)===String(fbId));
-  if(idx>=0) arr[idx]={...arr[idx],...data};
-  saveLocal(); refreshAll();
+  if(!FIREBASE_ENABLED){
+    const arr = col==='tasks'?tasks:col==='giaps'?giaps:col==='compras'?compras:col==='contratos'?contratos:col==='editais'?editais:[];
+    const idx = arr.findIndex(x=>x._fbId===fbId||String(x.id)===String(fbId));
+    if(idx>=0) arr[idx]={...arr[idx],...data};
+    saveLocal(); refreshAll(); return;
+  }
+  try{
+    // find doc id
+    const snap = await db.collection(col).where('_fbId','==',fbId).limit(1).get();
+    let docId = fbId;
+    if(!snap.empty) docId = snap.docs[0].id;
+    await db.collection(col).doc(docId).set({...data, _ts:Date.now()}, {merge:true});
+  }catch(e){ console.error('fbUpdate',e); showSyncStatus('erro ao atualizar',true); }
 }
+
 async function fbDelete(col, fbId){
-  const filter = arr => arr.filter(x=>x._fbId!==fbId&&String(x.id)!==String(fbId));
-  if(col==='tasks')   tasks=filter(tasks);
-  if(col==='giaps')   giaps=filter(giaps);
-  if(col==='compras') compras=filter(compras);
-  if(col==='dfd')     dfdHistory=filter(dfdHistory);
-  saveLocal(); refreshAll();
+  if(!FIREBASE_ENABLED){
+    const filter = arr => arr.filter(x=>x._fbId!==fbId&&String(x.id)!==String(fbId));
+    if(col==='tasks')    tasks=filter(tasks);
+    if(col==='giaps')    giaps=filter(giaps);
+    if(col==='compras')  compras=filter(compras);
+    if(col==='dfd')      dfdHistory=filter(dfdHistory);
+    if(col==='contratos')contratos=filter(contratos);
+    if(col==='editais')  editais=filter(editais);
+    saveLocal(); refreshAll(); return;
+  }
+  try{
+    await db.collection(col).doc(fbId).delete();
+  }catch(e){ console.error('fbDelete',e); showSyncStatus('erro ao excluir',true); }
+}
+
+// Save to Firebase (for modules that use save functions directly)
+async function fbSaveAll(col, arr){
+  if(!FIREBASE_ENABLED){ saveLocal(); refreshAll(); return; }
+  try{
+    const batch = db.batch();
+    // Delete all and rewrite (simple approach for contratos/editais)
+    const snap = await db.collection(col).get();
+    snap.docs.forEach(d=>batch.delete(d.ref));
+    arr.forEach(item=>{
+      const ref = item._fbId ? db.collection(col).doc(item._fbId) : db.collection(col).doc();
+      batch.set(ref, {...item, _fbId:ref.id, _ts:Date.now()});
+    });
+    await batch.commit();
+  }catch(e){ console.error('fbSaveAll',e); showSyncStatus('erro ao salvar',true); }
 }
 
 // ===== RENDER TASKS TABLE =====
@@ -1886,13 +2104,15 @@ function renderTaskTable(){
   const tbody = document.getElementById('task-table-body');
   if(!tbody) return;
   let filtered = tasks.filter(t=>{
+    if(!podeVerTarefa(t)) return false;
     if(currentFilter!=='todos' && t.status!==currentFilter) return false;
     if(currentTipoFilter && t.tipo!==currentTipoFilter) return false;
     return true;
   });
   const label = document.getElementById('task-count-label');
   if(label) label.textContent = `${filtered.length} tarefa${filtered.length!==1?'s':''}`;
-  const fCounts={todos:tasks.length,pendente:tasks.filter(t=>t.status==='pendente').length,andamento:tasks.filter(t=>t.status==='andamento').length,concluida:tasks.filter(t=>t.status==='concluida').length,atrasada:tasks.filter(t=>t.status==='atrasada').length};
+  const visibleTasks = tasks.filter(podeVerTarefa);
+  const fCounts={todos:visibleTasks.length,pendente:visibleTasks.filter(t=>t.status==='pendente').length,andamento:visibleTasks.filter(t=>t.status==='andamento').length,concluida:visibleTasks.filter(t=>t.status==='concluida').length,atrasada:visibleTasks.filter(t=>t.status==='atrasada').length};
   document.querySelectorAll('#task-filters .filter-btn').forEach(btn=>{
     const f=btn.dataset.filter;if(f&&fCounts[f]!==undefined){
       let badge=btn.querySelector('.fcnt');
@@ -1910,7 +2130,7 @@ function renderTaskTable(){
       <td style="padding:10px 14px;overflow:hidden">
         <div style="font-weight:500;font-size:13px;white-space:normal;word-break:break-word;line-height:1.4">${t.nome}</div>
         ${t.giap?`<div style="font-size:11px;color:var(--teal-light);margin-top:3px">🔗 Processo: ${t.giap}</div>`:''}
-        ${t.desc?`<div style="font-size:11px;color:var(--text-faint);margin-top:3px;white-space:normal;line-height:1.4">${t.desc.substring(0,100)}${t.desc.length>100?'...':''}</div>`:''}
+        ${t.desc?`<div style="font-size:11px;color:var(--text-faint);margin-top:3px;white-space:normal;line-height:1.4">${t.desc}</div>`:''}
       </td>
       <td style="padding:10px 14px">
         <div style="display:flex;align-items:center;gap:7px">
@@ -1962,7 +2182,7 @@ function renderKanban(){
     const body=document.getElementById(bodyId);
     const cnt=document.getElementById(cntId);
     if(!body)return;
-    const items=tasks.filter(t=>t.status===status);
+    const items=tasks.filter(t=>t.status===status && podeVerTarefa(t));
     if(cnt)cnt.textContent=items.length;
     if(items.length===0){body.innerHTML='<div style="color:var(--text-faint);font-size:12px;text-align:center;padding:20px;opacity:.6">Nenhuma tarefa</div>';return;}
     body.innerHTML=items.map(t=>`
@@ -2692,6 +2912,93 @@ window.exportPDF = function exportPDF(section){
     body += '</tbody></table>';
   }
 
+  if(section==='contratos'){
+    const cssPdf = [
+      'body{font-family:Arial,Helvetica,sans-serif;font-size:10px;color:#111;margin:0;padding:0}',
+      '.wrap{max-width:100%;padding:16px 24px}',
+      '.hdr{display:flex;align-items:center;gap:12px;padding-bottom:10px;border-bottom:3px solid #0B1D3A;margin-bottom:12px}',
+      '.hdr img{height:44px;object-fit:contain}',
+      '.hdr-text h1{font-size:13px;font-weight:700;color:#0B1D3A;margin:0 0 2px}',
+      '.hdr-text p{font-size:9px;color:#555;margin:0}',
+      'h2{font-size:11px;font-weight:700;margin:12px 0 6px;padding:5px 10px;background:#0B1D3A;color:#fff;border-radius:3px}',
+      'table{width:100%;border-collapse:collapse;font-size:9px}',
+      'th{background:#0B1D3A;color:#fff;padding:5px 6px;text-align:center;font-size:8.5px;white-space:nowrap}',
+      'th.left{text-align:left}',
+      'td{padding:4px 6px;border-bottom:1px solid #e5e7eb;vertical-align:top}',
+      'td.center{text-align:center} td.right{text-align:right} td.mono{font-family:monospace}',
+      'tr:nth-child(even) td{background:#f8fafc}',
+      'tr.alerta-90 td{background:#fefce8} tr.alerta-60 td{background:#fff7ed} tr.alerta-30 td{background:#fff1f2} tr.vencido td{background:#fef2f2}',
+      '.red{color:#dc2626;font-weight:600} .green{color:#059669} .amber{color:#d97706} .gray{color:#6b7280}',
+      '.tag-sec{background:#eff6ff;color:#1d4ed8;border-radius:3px;padding:1px 5px;font-size:8px}',
+      '.renovar{background:#f0fdf4;color:#15803d;border-radius:3px;padding:1px 5px;font-size:8px}',
+      '.nao-renova{background:#fef2f2;color:#b91c1c;border-radius:3px;padding:1px 5px;font-size:8px}',
+      '.arquivado{background:#f3f4f6;color:#4b5563;border-radius:3px;padding:1px 5px;font-size:8px}',
+      '.totais{background:#f0f4ff;border:1px solid #c7d2fe;border-radius:4px;padding:8px 12px;margin-top:8px;font-size:10px}',
+      '.totais b{color:#1e40af}',
+      '.obs-row td{background:#faf9f7!important;color:#78716c;font-style:italic;font-size:8.5px;padding:3px 6px}',
+      '@media print{@page{margin:1cm;size:A4 landscape}body{padding:0}.no-print{display:none!important}}',
+    ].join('');
+    const fmtR = v => v ? 'R$ '+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2}) : '—';
+    const fmtD = v => v ? new Date(v+'T00:00').toLocaleDateString('pt-BR') : '—';
+    let totalValor=0, totalPago2=0, totalSaldo=0;
+    const rows = contratos.map(c=>{
+      const d = contratosDias(c);
+      const nivel = contratoAlertLevel(c);
+      const rowCls = nivel==='vencido'?'vencido':nivel==='critico'?'alerta-30':nivel==='urgente'?'alerta-60':nivel==='atencao'?'alerta-90':'';
+      const vigLabel = !c.vigencia?'—': d<0?`<span class="red">VENCIDO há ${Math.abs(d)}d</span>`: d<=30?`<span class="red">🚨 ${fmtD(c.vigencia)}<br>(${d}d)</span>`: d<=60?`<span class="amber">⚠ ${fmtD(c.vigencia)}<br>(${d}d)</span>`: d<=90?`<span class="amber">⏰ ${fmtD(c.vigencia)}<br>(${d}d)</span>`:fmtD(c.vigencia);
+      const renovTag = c.arquivado?'<span class="arquivado">📁 Arquivado</span>': c.intendeRenovar===true?'<span class="renovar">↻ Renova</span>': c.intendeRenovar===false?'<span class="nao-renova">✕ Não renova</span>':'';
+      const saldoVal = (c.valorTotal && c.totalPago) ? Number(c.valorTotal)-Number(c.totalPago) : null;
+      if(!c.arquivado && c.valorTotal) totalValor += Number(c.valorTotal);
+      if(!c.arquivado && c.totalPago) totalPago2 += Number(c.totalPago);
+      if(!c.arquivado && saldoVal!==null) totalSaldo += saldoVal;
+      const anoFmt = c.ano||(c.assinatura?c.assinatura.substring(0,4):'—');
+      return `<tr class="${rowCls}">
+        <td class="center mono" style="font-weight:700;color:#1d4ed8">${c.contrato||'—'}</td>
+        <td class="center">${anoFmt}</td>
+        <td class="center"><span class="tag-sec">${c.secretaria||'—'}</span></td>
+        <td class="center mono" style="font-size:8px">${c.processo||'—'}</td>
+        <td style="font-weight:600;max-width:120px">${c.empresa||'—'} ${renovTag}</td>
+        <td style="max-width:160px;font-size:8.5px">${c.objeto||'—'}</td>
+        <td style="max-width:100px;font-size:8px;color:#555">${c.fundamento||'—'}</td>
+        <td class="center">${fmtD(c.assinatura)}</td>
+        <td class="center">${vigLabel}</td>
+        <td class="right" style="font-weight:600">${fmtR(c.valorTotal)}</td>
+        <td class="center">${c.realizado!=null&&c.realizado!==''?c.realizado+'%':'—'}</td>
+        <td class="center">${c.aRealizar?c.aRealizar+'%':'—'}</td>
+        <td class="right" style="color:#0f766e">${fmtR(c.totalPago)}</td>
+        <td class="right" style="font-weight:600;color:${saldoVal>0?'#b45309':saldoVal===0?'#15803d':'#4b5563'}">${saldoVal!==null?fmtR(saldoVal):'—'}</td>
+      </tr>${c.obs?`<tr class="obs-row"><td colspan="14">📝 ${c.obs}</td></tr>`:''}
+      ${c.arquivado&&c.motivoArquivamento?`<tr class="obs-row"><td colspan="14">📁 Motivo: ${c.motivoArquivamento}</td></tr>`:''}`;
+    }).join('');
+    const totaisRow = `<div class="totais">
+      <b>Totalizadores (contratos ativos):</b> &nbsp;&nbsp;
+      Valor Total Contratado: <b>R$ ${totalValor.toLocaleString('pt-BR',{minimumFractionDigits:2})}</b> &nbsp;|&nbsp;
+      Total Pago: <b>R$ ${totalPago2.toLocaleString('pt-BR',{minimumFractionDigits:2})}</b> &nbsp;|&nbsp;
+      Saldo a Pagar: <b>R$ ${totalSaldo.toLocaleString('pt-BR',{minimumFractionDigits:2})}</b>
+    </div>`;
+    const tblHead = `<table><thead><tr>
+      <th>Contrato</th><th>Ano</th><th>Secretaria</th><th>Processo</th>
+      <th class="left">Entidade/Empresa</th><th class="left">Objeto</th><th class="left">Fundamento</th>
+      <th>Assinatura</th><th>Vigência</th>
+      <th>Valor Contratual<br>(com aditamentos)</th><th>Realizado<br>(%)</th><th>A realizar<br>(%)</th>
+      <th>Total pago<br>(R$)</th><th>Saldo a pagar<br>(R$)</th>
+    </tr></thead><tbody>${rows}</tbody></table>`;
+    const pdfBody = '<div class="wrap"><div class="hdr"><img src="'+logoSrc+'"><div class="hdr-text"><h1>Prefeitura Municipal de São Carlos — GovFlow</h1><p>Sec. Municipal de Cultura e Turismo &nbsp;|&nbsp; '+geradoPor+'Gerado em: '+now+'</p></div></div>'
+      +'<h2>📃 Contratos — '+contratos.length+' registro(s)</h2>'+tblHead+totaisRow+'</div>';
+    const winC = window.open('about:blank','govflow_ct','width=1300,height=820,scrollbars=yes,resizable=yes');
+    if(!winC){showToast('⚠','Popup bloqueado','Permita popups no navegador.','rgba(245,158,11,.4)');return;}
+    winC.document.open('text/html','replace');
+    winC.document.write('<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>GovFlow — Contratos</title><style>'+cssPdf+'</style></head><body>'
+      +'<div class="no-print" style="position:sticky;top:0;background:#0B1D3A;padding:8px 20px;display:flex;gap:12px;align-items:center;z-index:999">'
+      +'<span style="color:#fff;font-weight:500;font-size:13px">Contratos</span>'
+      +'<div style="margin-left:auto;display:flex;gap:10px">'
+      +'<button onclick="window.print()" style="padding:7px 18px;background:#2563EB;color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600">🖨 Imprimir / PDF</button>'
+      +'<button onclick="window.close()" style="padding:7px 12px;background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer">× Fechar</button>'
+      +'</div></div>'+pdfBody+'</body></html>');
+    winC.document.close();
+    return;
+  }
+
   if(section==='giap'||section==='all'){
     body += '<h2>&#8635; Processos GIAP</h2><table><thead><tr><th>Nº</th><th>Assunto</th><th>Sec. Atual</th><th>Etapa</th><th>Prazo</th><th>Status</th></tr></thead><tbody>';
     giaps.forEach(g=>{
@@ -2898,12 +3205,30 @@ window.deleteDFD = async function deleteDFD(id){
 };
 
 // ===== LOGIN / USER SYSTEM =====
+// Initialize login screen and selects on page load
+(function initDynamic(){
+  function init(){
+    renderLoginButtons();
+    populateRespSelects();
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
 window.fullLoginInit = function fullLoginInit(name){
   currentUser=name;
   const ls=document.getElementById('login-screen');if(ls)ls.style.display='none';
   const uc=userColors[name]||{bg:'linear-gradient(135deg,#3B82F6,#8B5CF6)',initials:name.substring(0,2).toUpperCase()};
   const av=document.getElementById('topbar-avatar');if(av){av.textContent=uc.initials;av.style.background=uc.bg;}
   const un=document.getElementById('topbar-username');if(un)un.textContent=name;
+  // Mostrar botão admin só para Fabiana
+  const btnAdmin=document.getElementById('btn-admin-senhas');
+  if(btnAdmin) btnAdmin.style.display = name===GF_ADMIN ? 'inline' : 'none';
+  const btnEquipe=document.getElementById('btn-admin-equipe');
+  if(btnEquipe) btnEquipe.style.display = name===GF_ADMIN ? 'inline' : 'none';
   startUserAlerts();
   startFirebaseListeners();
   const myNav=document.getElementById('nav-my-tasks');if(myNav)myNav.style.display='flex';
@@ -2922,8 +3247,17 @@ window.fullLoginInit = function fullLoginInit(name){
 window.doLogout = function doLogout(){
   if(!confirm('Trocar de usuário?')) return;
   currentUser=null;
+  _pendingUser=null;
   alertIntervals.forEach(id=>clearInterval(id));alertIntervals=[];
+  const btnAdmin=document.getElementById('btn-admin-senhas');
+  if(btnAdmin) btnAdmin.style.display='none';
+  const btnEq=document.getElementById('btn-admin-equipe');
+  if(btnEq) btnEq.style.display='none';
   const ls=document.getElementById('login-screen');if(ls)ls.style.display='flex';
+  const step1=document.getElementById('login-step1');if(step1)step1.style.display='block';
+  const step2=document.getElementById('login-step2');if(step2)step2.style.display='none';
+  const pw=document.getElementById('login-password');if(pw)pw.value='';
+  const err=document.getElementById('login-error');if(err)err.style.display='none';
   const ao=document.getElementById('alert-overlay');if(ao)ao.style.display='none';
   stopTitleFlash();
 };
@@ -3048,12 +3382,18 @@ setInterval(()=>{
 // Cada usuário tem sua própria configuração de agenda
 // ===== AGENDA (links diretos) =====
 function initCalendar(){
-  // Always use currentUser key - called after login
+  // Always use currentUser key - called after login and when navigating to agenda
+  const el = document.getElementById('agenda-comp-url');
+  if(el) el.value = ''; // limpa sempre primeiro
   if(!currentUser) return;
   const key = 'gf_agenda_comp_url_' + currentUser;
   const saved = localStorage.getItem(key);
-  const el = document.getElementById('agenda-comp-url');
-  if(el) el.value = saved||'';
+  if(el) el.value = saved || '';
+  // Atualiza labels com nome do usuário
+  const agUserLabel = document.getElementById('agenda-user-label');
+  if(agUserLabel) agUserLabel.textContent = `Agenda de ${currentUser} — exclusiva e privada`;
+  const agSettingsUser = document.getElementById('agenda-settings-user');
+  if(agSettingsUser) agSettingsUser.textContent = currentUser;
 }
 
 window.salvarAgendaCompartilhada = function(){
@@ -3087,6 +3427,7 @@ function loadEditais(){
 }
 function saveEditais(){
   try{localStorage.setItem('gf_editais',JSON.stringify(editais));}catch(e){}
+  if(FIREBASE_ENABLED) fbSaveAll('editais', editais);
 }
 function renderEditais(){
   const tbody=document.getElementById('editais-table-body');if(!tbody)return;
@@ -3217,801 +3558,68 @@ document.addEventListener('blur', function(e){
   }
 }, true);
 
-// ===== MÓDULO CONTROLE DE PROCESSOS (GIAP + COMPRAS UNIFICADO) =====
-
-let processos = [];
-let processoNextId = 1;
-let currentProcessoId = null;
-let processoFilter = 'todos';
-
-// Load/save
-function loadProcessos(){
-  try{const s=localStorage.getItem('gf_processos');if(s){processos=JSON.parse(s);processoNextId=Math.max(...processos.map(p=>p.id||0),0)+1;}}catch(e){}
-}
-function saveProcessos(){
-  try{localStorage.setItem('gf_processos',JSON.stringify(processos));}catch(e){}
-}
-
-// Status colors/labels
-const PROC_STATUS_COLOR = {concluido:'green',cancelado:'red',arquivado:'gray',em_tramitacao:'blue',aguardando:'amber',finalizado:'green',deferido:'green',indeferido:'red'};
-const PROC_STATUS_LABEL = {concluido:'Concluído',cancelado:'Cancelado',arquivado:'Arquivado',em_tramitacao:'Em Tramitação',aguardando:'Aguardando',finalizado:'Finalizado',deferido:'Deferido',indeferido:'Indeferido'};
-
-function renderProcessosList(){
-  const tbody = document.getElementById('processos-table-body');
-  if(!tbody) return;
-  
-  // Update filter counts
-  const counts = {todos:processos.length,em_tramitacao:0,aguardando:0,concluido:0,cancelado:0,arquivado:0};
-  processos.forEach(p=>{if(counts[p.status]!==undefined)counts[p.status]++;});
-  document.querySelectorAll('#processos-filters .filter-btn').forEach(btn=>{
-    const f=btn.dataset.filter; if(!f) return;
-    let b=btn.querySelector('.pcnt');
-    if(!b){b=document.createElement('span');b.className='pcnt';b.style.cssText='display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:9px;font-size:10px;font-weight:600;margin-left:5px;padding:0 4px;background:rgba(255,255,255,.12);color:rgba(255,255,255,.8)';btn.appendChild(b);}
-    b.textContent=counts[f]!==undefined?counts[f]:counts.todos;
-  });
-
-  const label = document.getElementById('processos-count-label');
-  let filtered = processoFilter==='todos' ? processos : processos.filter(p=>p.status===processoFilter);
-  if(label) label.textContent = `${filtered.length} processo${filtered.length!==1?'s':''}`;
-
-  if(filtered.length===0){
-    tbody.innerHTML='<tr class="no-results"><td colspan="8">Nenhum processo encontrado.</td></tr>';
-    return;
-  }
-
-  tbody.innerHTML = filtered.map(p=>{
-    const stCls = PROC_STATUS_COLOR[p.status]||'gray';
-    const stLbl = PROC_STATUS_LABEL[p.status]||p.status;
-    const tramitacoes = (p.tramitacoes||[]).length;
-    const ultimaTram = tramitacoes>0 ? p.tramitacoes[tramitacoes-1] : null;
-    const temCompra = !!(p.empenho||p.af||p.notaFiscal);
-    const prazoAlert = p.pagamento?.dataEnvioPag ? checkPrazoPagamento(p.pagamento.dataEnvioPag) : null;
-    return `<tr style="cursor:pointer" onclick="openProcessoDetalhe('${p.id}')">
-      <td><span class="process-num">${p.numero}/${p.ano}</span></td>
-      <td style="max-width:260px">
-        <div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${p.descricao}">${p.descricao}</div>
-        <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${tramitacoes} tramitação${tramitacoes!==1?'ões':''}${ultimaTram?' → '+ultimaTram.destino:''}</div>
-      </td>
-      <td style="font-size:12px">${p.dataTramitacaoInicial?new Date(p.dataTramitacaoInicial+'T00:00').toLocaleDateString('pt-BR'):'—'}</td>
-      <td>${temCompra?'<span class="tag tag-teal" style="font-size:10px">Compra</span>':'<span class="tag tag-gray" style="font-size:10px">Geral</span>'}</td>
-      <td><span class="status status-${stCls==='green'?'done':stCls==='red'?'overdue':stCls==='blue'?'progress':'pending'}">${stLbl}</span></td>
-      <td style="font-size:12px;color:${prazoAlert?'var(--red-light)':'var(--text-muted)'}">${prazoAlert||'—'}</td>
-      <td style="font-size:11px;color:var(--text-muted)">${p.criadoPor||'—'}</td>
-      <td style="white-space:nowrap">
-        <button class="btn btn-ghost" style="padding:4px 10px;font-size:12px" onclick="event.stopPropagation();openProcessoDetalhe('${p.id}')">Ver →</button>
-        <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px;color:var(--red-light);border-color:rgba(239,68,68,.2)" onclick="event.stopPropagation();deleteProcesso('${p.id}')">✕</button>
-      </td>
-    </tr>`;
-  }).join('');
-}
-
-function checkPrazoPagamento(dataEnvioPag){
-  if(!dataEnvioPag) return null;
-  const base = new Date(dataEnvioPag+'T00:00');
-  const venc = new Date(base.getTime() + 30*24*60*60*1000);
-  const diff = Math.round((venc - today)/(1000*60*60*24));
-  if(diff < 0) return `⚠ Venceu há ${Math.abs(diff)}d`;
-  if(diff <= 5) return `⏰ Vence em ${diff}d`;
-  return null;
-}
-
-window.filterProcessos = function filterProcessos(btn, filter){
-  document.querySelectorAll('#processos-filters .filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  processoFilter = filter;
-  renderProcessosList();
-};
-
-window.deleteProcesso = async function deleteProcesso(id){
-  if(!confirm('Excluir este processo? Esta ação não pode ser desfeita.')) return;
-  processos = processos.filter(p=>String(p.id)!==String(id));
-  saveProcessos();
-  renderProcessosList();
-  addAudit('excluiu','Processo',`Processo excluído`,'');
-  showToast('✕','Processo excluído.','','rgba(239,68,68,.4)');
-};
-
-// ===== CADASTRAR NOVO PROCESSO =====
-window.saveNewProcesso = async function saveNewProcesso(){
-  const numero = document.getElementById('np-numero')?.value.trim();
-  const ano = document.getElementById('np-ano')?.value;
-  const descricao = document.getElementById('np-descricao')?.value.trim();
-  const dataTram = document.getElementById('np-data-tram')?.value;
-  const destino = document.getElementById('np-destino')?.value.trim();
-  const tipo = document.getElementById('np-tipo')?.value;
-
-  if(!numero||!descricao){showToast('⚠','Campos obrigatórios','Preencha número e descrição.','rgba(245,158,11,.4)');return;}
-
-  const processo = {
-    id: processoNextId++,
-    numero, ano: ano||new Date().getFullYear(),
-    descricao, tipo: tipo||'geral',
-    dataTramitacaoInicial: dataTram,
-    status: 'em_tramitacao',
-    criadoPor: currentUser||'Sistema',
-    criadoEm: new Date().toLocaleString('pt-BR'),
-    tramitacoes: dataTram&&destino ? [{
-      data: dataTram,
-      destino: destino,
-      obs: document.getElementById('np-obs-inicial')?.value||'',
-      tipo: 'saida',
-      usuario: currentUser||'Sistema',
-      dataHora: new Date().toLocaleString('pt-BR')
-    }] : [],
-    retornos: [],
-    tratativas: [],
-    documentos: [],
-    empenho: null,
-    af: null,
-    notaFiscal: null,
-    pagamento: null,
-    statusFinal: null,
-    obs: document.getElementById('np-obs-inicial')?.value||''
-  };
-
-  processos.unshift(processo);
-  saveProcessos();
-  renderProcessosList();
-  closeModal('modal-new-processo');
-  addAudit('criou','Processo',`Processo: ${numero}/${ano}`,`${descricao}`);
-  showToast('✓','Processo cadastrado!','','rgba(16,185,129,.4)');
-  // Clear form
-  ['np-numero','np-descricao','np-destino','np-obs-inicial'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  const dateEl=document.getElementById('np-data-tram');if(dateEl)dateEl.value='';
-};
-
-// ===== DETALHE DO PROCESSO =====
-window.openProcessoDetalhe = function openProcessoDetalhe(id){
-  const p = processos.find(x=>String(x.id)===String(id));
-  if(!p) return;
-  currentProcessoId = id;
-  showPage('processo-detalhe', null);
-  renderProcessoDetalhe(p);
-};
-
-function renderProcessoDetalhe(p){
-  const setEl=(id,html)=>{const e=document.getElementById(id);if(e)e.innerHTML=html;};
-  const setTxt=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-
-  setTxt('pd-title', `${p.numero}/${p.ano}`);
-  setTxt('pd-subtitle', p.descricao);
-
-  // Status badge
-  const stCls = PROC_STATUS_COLOR[p.status]||'gray';
-  const stLbl = PROC_STATUS_LABEL[p.status]||p.status;
-  setEl('pd-status-badge', `<span class="tag tag-${stCls}" style="font-size:13px;padding:5px 16px">${stLbl}</span>
-    <span style="font-size:12px;color:var(--text-muted)">${p.tipo==='compra'?'🛒 Processo de Compra':'📋 Processo Geral'}</span>`);
-
-  // Info card
-  setEl('pd-info', `
-    <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Número</span><span class="process-num">${p.numero}/${p.ano}</span></div>
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Cadastrado por</span><span>${p.criadoPor}</span></div>
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Criado em</span><span style="font-size:12px">${p.criadoEm}</span></div>
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">1ª Tramitação</span><span>${p.dataTramitacaoInicial?new Date(p.dataTramitacaoInicial+'T00:00').toLocaleDateString('pt-BR'):'—'}</span></div>
-      ${p.obs?`<div style="border-top:1px solid var(--border);padding-top:8px;font-size:12px;color:var(--text-muted);line-height:1.5">${p.obs}</div>`:''}
-    </div>`);
-
-  // Tabs content
-  renderPdTab(p, 'tramitacoes');
-}
-
-window.pdTab = function pdTab(tab){
-  const p = processos.find(x=>String(x.id)===String(currentProcessoId));
-  if(p) renderPdTab(p, 'tramitacoes');
-};
-
-function renderPdTab(p, tab){
-  // tab param ignored - always render unified timeline
-  const container = document.getElementById('pd-tab-content');
-  if(!container) return;
-
-  const trams    = (p.tramitacoes||[]).map(t=>({...t, _tipo:'tramitacao'}));
-  const retornos = (p.retornos||[]).map(r=>({...r, _tipo:'retorno'}));
-  const tratativas = (p.tratativas||[]).map(t=>({...t, _tipo:'tratativa'}));
-  const docs     = (p.documentos||[]).map(d=>({...d, _tipo:'documento'}));
-
-  // Sort all events by ts (unix timestamp) newest first, fallback to dataHora string
-  const events = [...trams, ...retornos, ...tratativas, ...docs].sort((a,b)=>{
-    if(a.ts && b.ts) return b.ts - a.ts;
-    const parse = s => {
-      if(!s) return 0;
-      const [d,t] = (s||'').split(', ');
-      if(!d) return 0;
-      const [day,mon,year] = d.split('/');
-      return new Date(`${year}-${mon}-${day}T${t||'00:00'}`).getTime()||0;
-    };
-    return parse(b.dataHora) - parse(a.dataHora);
-  });
-
-  const typeLabel = {tramitacao:'🔄 TRAMITAÇÃO',retorno:'↩ RETORNO',tratativa:'📝 TRATATIVA',documento:'📎 DOCUMENTO',pagamento:'💸 ENVIADO PARA PAGAMENTO',pagamento_ok:'✅ PAGAMENTO CONCLUÍDO'};
-  const typeColor = {tramitacao:'var(--teal-light)',retorno:'var(--amber-light)',tratativa:'#C4B5FD',documento:'var(--accent-light)',pagamento:'#f59e0b',pagamento_ok:'var(--green-light)'};
-  const dotColor  = {tramitacao:'var(--teal)',retorno:'var(--amber)',tratativa:'#7C3AED',documento:'var(--accent)',pagamento:'#f59e0b',pagamento_ok:'var(--green)'};
-
-  // Show/hide compra section
-  const temCompra = !!(p.empenho||p.af||p.notaFiscal||p.pagamento||p.tipo==='compra');
-  const compraSection = document.getElementById('pd-compra-section');
-  if(compraSection) compraSection.style.display = temCompra ? 'block' : 'none';
-  if(temCompra) renderCompraPainel(p);
-
-  container.innerHTML = `
-    <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
-      <button class="btn btn-ghost" style="color:var(--teal-light);border-color:rgba(13,148,136,.3);font-size:12px" onclick="openAddTramitacaoProcesso()">🔄 Nova Tramitação</button>
-      <button class="btn btn-ghost" style="color:var(--amber-light);border-color:rgba(245,158,11,.3);font-size:12px" onclick="openAddRetorno()">↩ Retorno</button>
-      <button class="btn btn-ghost" style="color:#C4B5FD;border-color:rgba(124,58,237,.3);font-size:12px" onclick="openAddTratativa()">📝 Tratativa</button>
-      <button class="btn btn-ghost" style="color:var(--accent-light);border-color:rgba(59,130,246,.3);font-size:12px" onclick="openAddDocumento()">📎 Documento</button>
-      <button class="btn btn-ghost" style="color:var(--red-light);border-color:rgba(239,68,68,.2);font-size:12px" onclick="desfazerUltimoRegistro('${p.id}')">↺ Desfazer Último</button>
-      <button class="btn btn-ghost" style="color:var(--green-light);border-color:rgba(16,185,129,.3);font-size:12px" onclick="openSetStatusFinal()">✓ Status Final</button>
-      <button class="btn btn-ghost" style="color:#f59e0b;border-color:rgba(245,158,11,.3);font-size:12px" onclick="openEditPagProcesso()">💰 Pagamento</button>
-      ${!temCompra?`<button class="btn btn-ghost" style="color:rgba(255,255,255,.4);border-color:rgba(255,255,255,.1);font-size:12px" onclick="ativarCompra('${p.id}')">💰 Processo de Compra</button>`:''}
-    </div>
-
-    ${p.statusFinal ? `<div style="margin-bottom:16px;padding:12px 16px;border-radius:10px;background:rgba(16,185,129,.07);border:1px solid ${['concluido','finalizado'].includes(p.statusFinal.status)?'rgba(16,185,129,.3)':p.statusFinal.status==='cancelado'?'rgba(239,68,68,.3)':'rgba(99,102,241,.3)'}">
-      <div style="font-size:13px;font-weight:700;color:${['concluido','finalizado'].includes(p.statusFinal.status)?'var(--green-light)':p.statusFinal.status==='cancelado'?'var(--red-light)':'var(--accent-light)'}">
-        ${['concluido','finalizado'].includes(p.statusFinal.status)?'✅':p.statusFinal.status==='cancelado'?'✗ ':'📋 '} STATUS FINAL: ${(p.statusFinal.status||'').toUpperCase()}
-      </div>
-      ${p.statusFinal.obs?`<div style="font-size:12px;color:var(--text-muted);margin-top:4px">${p.statusFinal.obs}</div>`:''}
-      <div style="font-size:11px;color:var(--text-faint);margin-top:4px">${p.statusFinal.data?new Date(p.statusFinal.data+'T00:00').toLocaleDateString('pt-BR'):''} ${p.statusFinal.hora?'às '+p.statusFinal.hora:''} &nbsp;•&nbsp; ${p.statusFinal.usuario||''}</div>
-    </div>` : ''}
-
-    ${events.length===0
-      ? `<div style="padding:40px;text-align:center;color:var(--text-muted);opacity:.6"><div style="font-size:36px;margin-bottom:8px">🔄</div>Nenhuma movimentação registrada.</div>`
-      : events.map((ev,i)=>{
-          const dot = dotColor[ev._tipo]||'var(--accent)';
-          const col = typeColor[ev._tipo]||'var(--accent-light)';
-          const lbl = typeLabel[ev._tipo]||ev._tipo;
-          const destino = ev._tipo==='tramitacao' ? ` → ${ev.destino||''}` : '';
-          const isFirst = i===0;
-          return `<div style="display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)${isFirst?';background:rgba(255,255,255,.02);border-radius:8px;padding:14px;margin-bottom:2px':''}">
-            <div style="flex-shrink:0;width:12px;height:12px;border-radius:50%;background:${dot};border:2px solid ${dot};margin-top:3px${isFirst?';box-shadow:0 0 0 4px '+dot.replace(')',', .15)').replace('var(','rgba(255,255,255,'):''}"></div>
-            <div style="flex:1;min-width:0">
-              <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:${ev._tipo==='tramitacao'&&!ev.obs&&ev._tipo==='tramitacao'?'0':'6px'}">
-                <span style="font-size:11.5px;font-weight:700;color:${col};text-transform:uppercase;letter-spacing:.6px;white-space:nowrap">${lbl}${destino}</span>
-                <span style="font-size:11px;color:var(--text-faint);margin-left:auto;white-space:nowrap;flex-shrink:0;text-align:right">${ev.dataHora||''} &nbsp;•&nbsp; ${ev.usuario||''}</span>
-              </div>
-              ${ev._tipo==='tramitacao'&&ev.obs?`<div style="font-size:13px;background:var(--surface2);padding:8px 12px;border-radius:8px;line-height:1.5">${ev.obs}</div>`:''}
-              ${ev._tipo==='retorno'?`
-                ${ev.motivo?`<div style="font-size:13px;padding:6px 10px;background:rgba(245,158,11,.07);border-radius:6px;margin-bottom:4px"><b>Motivo:</b> ${ev.motivo}</div>`:''}
-                ${ev.despacho?`<div style="font-size:13px;background:var(--surface2);padding:8px 12px;border-radius:8px"><b>Despacho:</b> ${ev.despacho}</div>`:''}
-              `:''}
-              ${ev._tipo==='tratativa'&&ev.feito?`<div style="font-size:13px;background:var(--surface2);padding:8px 12px;border-radius:8px;line-height:1.5">${ev.feito}</div>`:''}
-              ${ev._tipo==='documento'?`
-                <div style="display:flex;align-items:center;gap:8px;background:var(--surface2);padding:8px 12px;border-radius:8px">
-                  <span style="font-size:18px">${getDocIcon(ev.tipoDoc||ev.tipo2||'')}</span>
-                  <div style="flex:1">
-                    <div style="font-size:13px;font-weight:500">${getDocLabel(ev.tipoDoc||ev.tipo2||'')}${ev.numero?' — Nº '+ev.numero+(ev.ano?'/'+ev.ano:''):''}${ev.fornecedor?' ('+ev.fornecedor+')':''}</div>
-                    ${ev.descricao?`<div style="font-size:12px;color:var(--text-muted);margin-top:2px">${ev.descricao}</div>`:''}
-                  </div>
-                  <button onclick="removeDocumento(${(p.documentos||[]).findIndex(d=>d.ts===ev.ts&&d.tipoDoc===ev.tipoDoc)})" style="background:none;border:none;color:var(--red-light);cursor:pointer;font-size:14px;opacity:.6;flex-shrink:0" title="Remover">✕</button>
-                </div>
-              `:''}
-            </div>
-          </div>`;
-        }).join('')
-    }`;
-}
-
-function getDocIcon(tipo){
-  const icons={plano_trabalho:'📋',boleto:'💳',consumo_ata:'📄',consumo:'📄',af:'⚙',nota_empenho:'📝',nota_fiscal:'🧾',contrato:'📃'};
-  return icons[tipo]||'📎';
-}
-function getDocLabel(tipo){
-  const labels={plano_trabalho:'Plano de Trabalho',boleto:'Boleto',consumo_ata:'Solicitação de Consumo de Ata',consumo:'Solicitação de Consumo',af:'Autorização de Fornecimento (AF)',nota_empenho:'Nota de Empenho',nota_fiscal:'Nota Fiscal',contrato:'Contrato / Termo'};
-  return labels[tipo]||tipo;
-}
-
-function renderCompraPainel(p){
-  const container = document.getElementById('pd-compra-inner') || document.getElementById('pd-tab-content');
-  if(!container) return;
-  const emp = p.empenho||{};
-  const af = p.af||{};
-  const nf = p.notaFiscal||{};
-  const pag = p.pagamento||{};
-
-  const prazoAlert = pag.dataEnvioPag ? checkPrazoPagamento(pag.dataEnvioPag) : null;
-
-  container.innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-      <!-- EMPENHO -->
-      <div class="panel">
-        <div class="panel-header"><span>📝</span><span class="panel-title">Empenho</span>
-          <button class="panel-action" onclick="openEditEmpenho()">✎ Editar</button>
-        </div>
-        <div style="padding:14px 18px;font-size:13px">
-          ${emp.numero?`<div><span style="color:var(--text-muted)">Número:</span> <b>${emp.numero}${emp.ano?'/'+emp.ano:''}</b></div>`:`<div style="color:var(--text-muted)">Não registrado. <button class="btn btn-ghost" style="padding:3px 10px;font-size:11px;margin-top:6px" onclick="openEditEmpenho()">+ Registrar</button></div>`}
-        </div>
-      </div>
-      <!-- AF -->
-      <div class="panel">
-        <div class="panel-header"><span>⚙</span><span class="panel-title">Autorização de Fornecimento (AF)</span>
-          <button class="panel-action" onclick="openEditAFProcesso()">✎ Editar</button>
-        </div>
-        <div style="padding:14px 18px;font-size:13px">
-          ${af.numero?`
-            <div><span style="color:var(--text-muted)">Número:</span> <b style="color:var(--accent-light)">AF ${af.numero}/${af.ano||''}</b></div>
-            ${af.fornecedor?`<div style="margin-top:4px"><span style="color:var(--text-muted)">Fornecedor:</span> ${af.fornecedor}</div>`:''}
-            ${af.descricao?`<div style="margin-top:4px;font-size:12px;color:var(--text-muted)">${af.descricao}</div>`:''}
-          `:`<div style="color:var(--text-muted)">Não registrada. <button class="btn btn-ghost" style="padding:3px 10px;font-size:11px;margin-top:6px" onclick="openEditAFProcesso()">+ Registrar</button></div>`}
-        </div>
-      </div>
-      <!-- NOTA FISCAL -->
-      <div class="panel">
-        <div class="panel-header"><span>🧾</span><span class="panel-title">Nota Fiscal</span>
-          <button class="panel-action" onclick="openEditNFProcesso()">✎ Editar</button>
-        </div>
-        <div style="padding:14px 18px;font-size:13px">
-          ${nf.numero?`
-            <div><span style="color:var(--text-muted)">Nº NF:</span> <b style="color:var(--accent-light)">${nf.numero}${nf.ano?'/'+nf.ano:''}</b></div>
-            ${nf.fornecedor?`<div style="margin-top:4px"><span style="color:var(--text-muted)">Fornecedor:</span> ${nf.fornecedor}</div>`:''}
-            ${nf.cnpj?`<div style="font-size:12px"><span style="color:var(--text-muted)">CNPJ:</span> ${nf.cnpj}</div>`:''}
-            ${nf.banco?`<div style="font-size:12px"><span style="color:var(--text-muted)">Banco/Conta:</span> ${nf.banco}/${nf.conta||''}</div>`:''}
-            ${nf.dataRecebimento?`<div style="font-size:12px"><span style="color:var(--text-muted)">Recebida em:</span> ${new Date(nf.dataRecebimento+'T00:00').toLocaleDateString('pt-BR')}</div>`:''}
-          `:`<div style="color:var(--text-muted)">Não registrada. <button class="btn btn-ghost" style="padding:3px 10px;font-size:11px;margin-top:6px" onclick="openEditNFProcesso()">+ Registrar</button></div>`}
-        </div>
-      </div>
-      <!-- PAGAMENTO -->
-      <div class="panel" style="border-color:${pag.recebidoComprovante?'rgba(16,185,129,.3)':prazoAlert?'rgba(239,68,68,.3)':'var(--border2)'}">
-        <div class="panel-header"><span>💰</span><span class="panel-title">Pagamento</span>
-          <button class="panel-action" onclick="openEditPagProcesso()">✎ Editar</button>
-        </div>
-        <div style="padding:14px 18px;font-size:13px">
-          ${pag.dataEnvioPag?`
-            <div><span style="color:var(--text-muted)">Enviado para pagamento:</span> <b>${new Date(pag.dataEnvioPag+'T00:00').toLocaleDateString('pt-BR')}</b></div>
-            ${prazoAlert?`<div style="margin-top:6px;padding:6px 10px;background:rgba(239,68,68,.1);border-radius:6px;color:var(--red-light);font-size:12px;font-weight:500">${prazoAlert} — Cobrar pagamento!</div>`:''}
-            ${pag.recebidoComprovante?`<div style="margin-top:8px"><span class="status status-done">✅ Comprovante recebido — ${pag.dataComprovante?new Date(pag.dataComprovante+'T00:00').toLocaleDateString('pt-BR'):''}</span></div>`:'<div style="margin-top:6px;font-size:11px;color:var(--text-muted)">Aguardando comprovante...</div>'}
-          `:`<div style="color:var(--text-muted)">Não registrado. <button class="btn btn-ghost" style="padding:3px 10px;font-size:11px;margin-top:6px" onclick="openEditPagProcesso()">+ Registrar</button></div>`}
-        </div>
-      </div>
-    </div>
-    ${pag.recebidoComprovante&&p.status!=='finalizado'?`
-      <div style="margin-top:16px;padding:20px;background:rgba(16,185,129,.06);border:2px dashed rgba(16,185,129,.3);border-radius:12px;text-align:center">
-        <div style="font-size:14px;font-weight:500;color:var(--green-light);margin-bottom:8px">✅ Pagamento confirmado — pronto para arquivar!</div>
-        <button class="btn btn-primary" style="background:var(--green)" onclick="arquivarProcessoFinal('${p.id}')">📁 Arquivar Processo</button>
-      </div>`:''
-    }`;
-}
-
-// ===== ACTIONS =====
-window.openAddTramitacaoProcesso = function(){
-  const p = processos.find(x=>String(x.id)===String(currentProcessoId));
-  const destEl = document.getElementById('at-destino');
-  if(destEl) destEl.value = '';
-  const dataEl = document.getElementById('at-data');
-  if(dataEl) dataEl.value = isoFmt(today);
-  const obsEl = document.getElementById('at-obs');
-  if(obsEl) obsEl.value = '';
-  openModal('modal-add-tramitacao-proc');
-};
-window.saveTramitacaoProcesso = function(){
-  const destino = document.getElementById('at-destino')?.value.trim();
-  const data = document.getElementById('at-data')?.value;
-  if(!destino||!data){showToast('⚠','Campos obrigatórios','Preencha destino e data.','rgba(245,158,11,.4)');return;}
-  const p = processos.find(x=>String(x.id)===String(currentProcessoId));
-  if(!p) return;
-  if(!p.tramitacoes) p.tramitacoes=[];
-  p.tramitacoes.push({data,destino,obs:document.getElementById('at-obs')?.value||'',usuario:currentUser||'Sistema',dataHora:new Date().toLocaleString('pt-BR'),hora:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),ts:Date.now()});
-  p.status='em_tramitacao';
-  saveProcessos(); renderProcessosList(); closeModal('modal-add-tramitacao-proc');
-  addAudit('tramitou','Processo',`${p.numero}/${p.ano} → ${destino}`,'');
-  showToast('✓','Tramitação registrada!','','rgba(16,185,129,.4)');
-  renderPdTab(p,'tramitacoes');
-};
-window.openAddRetorno = function(){
-  ['ar-data','ar-motivo','ar-despacho'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  const dataEl=document.getElementById('ar-data');if(dataEl)dataEl.value=isoFmt(today);
-  openModal('modal-add-retorno-proc');
-};
-window.saveRetornoProcesso = function(){
-  const data = document.getElementById('ar-data')?.value;
-  const motivo = document.getElementById('ar-motivo')?.value.trim();
-  if(!data||!motivo){showToast('⚠','Campos obrigatórios','Preencha data e motivo.','rgba(245,158,11,.4)');return;}
-  const p = processos.find(x=>String(x.id)===String(currentProcessoId));
-  if(!p) return;
-  if(!p.retornos) p.retornos=[];
-
-  const ts = Date.now();
-  p.retornos.push({data,motivo,despacho:document.getElementById('ar-despacho')?.value||'',usuario:currentUser||'Sistema',dataHora:new Date().toLocaleString('pt-BR'),hora:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),ts});
-  p.status='aguardando';
-  saveProcessos(); renderProcessosList();
-
-  // CREATE LINKED TASK if checkbox is checked
-  const criarTarefa = document.getElementById('ar-criar-tarefa')?.checked;
-  if(criarTarefa){
-    const nomeTarefa = document.getElementById('ar-tarefa-nome')?.value.trim();
-    const resp = document.getElementById('ar-tarefa-resp')?.value||'Fabiana';
-    if(nomeTarefa){
-      const newTask = {
-        id: Date.now()+1,
-        nome: nomeTarefa,
-        resp,
-        prio: document.getElementById('ar-tarefa-prio')?.value||'media',
-        tipo: document.getElementById('ar-tarefa-tipo')?.value||'Processo',
-        prazo: document.getElementById('ar-tarefa-prazo')?.value||'',
-        status: 'pendente',
-        desc: `Tarefa vinculada ao processo ${p.numero}/${p.ano}: ${motivo}`,
-        giap: `${p.numero}/${p.ano}`,
-        criadoPor: currentUser||'Sistema',
-        criadoEm: new Date().toLocaleString('pt-BR'),
-        _fbId: String(Date.now()+1)
-      };
-      tasks.unshift(newTask);
-      saveLocal();
-      refreshAll();
-      addAudit('criou','Tarefa',`Tarefa vinculada: ${nomeTarefa}`,`Processo ${p.numero}/${p.ano} — Resp: ${resp}`);
-      showToast('✅',`Retorno + tarefa criada para ${resp}!`,nomeTarefa,'rgba(16,185,129,.4)');
-    } else {
-      showToast('✓','Retorno registrado!','','rgba(16,185,129,.4)');
-    }
-  } else {
-    showToast('✓','Retorno registrado!','','rgba(16,185,129,.4)');
-  }
-
-  // Reset checkbox
-  const cbEl = document.getElementById('ar-criar-tarefa'); if(cbEl) cbEl.checked=false;
-  const tfEl = document.getElementById('ar-tarefa-fields'); if(tfEl) tfEl.style.display='none';
-
-  closeModal('modal-add-retorno-proc');
-  addAudit('registrou','Processo',`Retorno: ${p.numero}/${p.ano}`,motivo);
-  renderPdTab(p,'tramitacoes');
-};
-window.openAddTratativa = function(){
-  ['atr-data','atr-solicitado','atr-feito'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  const dataEl=document.getElementById('atr-data');if(dataEl)dataEl.value=isoFmt(today);
-  openModal('modal-add-tratativa-proc');
-};
-window.saveTratativaProcesso = function(){
-  const data=document.getElementById('atr-data')?.value;
-  const feito=document.getElementById('atr-feito')?.value.trim();
-  if(!data||!feito){showToast('⚠','Campos obrigatórios','Preencha a data e o que foi feito.','rgba(245,158,11,.4)');return;}
-  const p=processos.find(x=>String(x.id)===String(currentProcessoId));if(!p)return;
-  if(!p.tratativas)p.tratativas=[];
-  p.tratativas.push({data,feito,usuario:currentUser||'Sistema',dataHora:new Date().toLocaleString('pt-BR'),hora:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),ts:Date.now()});
-  saveProcessos();closeModal('modal-add-tratativa-proc');
-  addAudit('registrou','Processo',`Tratativa: ${p.numero}/${p.ano}`,feito);
-  showToast('✓','Tratativa registrada!','','rgba(16,185,129,.4)');
-  renderPdTab(p,'tramitacoes');
-};
-window.toggleArTarefa = function(){
-  const checked = document.getElementById('ar-criar-tarefa')?.checked;
-  const fields = document.getElementById('ar-tarefa-fields');
-  if(fields) fields.style.display = checked ? 'flex' : 'none';
-};
-window.toggleSfOutros = function(){
-  const v = document.getElementById('sf-status')?.value;
-  const grp = document.getElementById('sf-outros-group');
-  if(grp) grp.style.display = v==='outros' ? 'block' : 'none';
-};
-window.openSetStatusFinal = function(){
-  const sfEl=document.getElementById('sf-status');if(sfEl)sfEl.value='deferido';
-  const sfObs=document.getElementById('sf-obs');if(sfObs)sfObs.value='';
-  const sfData=document.getElementById('sf-data');if(sfData)sfData.value=isoFmt(today);
-  openModal('modal-status-final-proc');
-};
-window.saveStatusFinal = function(){
-  const status=document.getElementById('sf-status')?.value;
-  const data=document.getElementById('sf-data')?.value;
-  if(!data){showToast('⚠','Informe a data.','','rgba(245,158,11,.4)');return;}
-  const p=processos.find(x=>String(x.id)===String(currentProcessoId));if(!p)return;
-  const outrosTexto = document.getElementById('sf-outros-texto')?.value.trim();
-  if(status==='outros'&&!outrosTexto){showToast('⚠','Especifique o status.','','rgba(245,158,11,.4)');return;}
-  const statusLabel = status==='outros' ? outrosTexto : status;
-  p.statusFinal={status:statusLabel,data,obs:document.getElementById('sf-obs')?.value||'',usuario:currentUser||'Sistema',hora:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})};
-  p.status = status==='concluido'?'concluido':status==='cancelado'?'cancelado':'aguardando';
-  saveProcessos();renderProcessosList();closeModal('modal-status-final-proc');
-  addAudit('registrou','Processo',`Status final: ${status}`,`Processo ${p.numero}/${p.ano}`);
-  showToast('✓',`Processo ${status}!`,'','rgba(16,185,129,.4)');
-  renderPdTab(p,'tramitacoes');
-};
-window.openAddDocumento = function(){
-  ['doc-numero','doc-ano','doc-fornecedor','doc-cnpj','doc-banco','doc-conta','doc-descricao','doc-data-recebimento'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  toggleDocFields();
-  openModal('modal-add-documento-proc');
-};
-window.toggleDocFields = function(){
-  const tipo=document.getElementById('doc-tipo')?.value||'';
-  const showFornecedor=['af','nota_fiscal'].includes(tipo);
-  const showNumero=['af','nota_empenho','nota_fiscal','consumo_ata','consumo'].includes(tipo);
-  const showData=['nota_fiscal'].includes(tipo);
-  const grpForn=document.getElementById('doc-grp-fornecedor');if(grpForn)grpForn.style.display=showFornecedor?'block':'none';
-  const grpNum=document.getElementById('doc-grp-numero');if(grpNum)grpNum.style.display=showNumero?'block':'none';
-  const grpData=document.getElementById('doc-grp-data');if(grpData)grpData.style.display=showData?'block':'none';
-};
-window.saveDocumento = function(){
-  const tipo=document.getElementById('doc-tipo')?.value;
-  if(!tipo){showToast('⚠','Selecione o tipo.','','rgba(245,158,11,.4)');return;}
-  const p=processos.find(x=>String(x.id)===String(currentProcessoId));if(!p)return;
-  if(!p.documentos)p.documentos=[];
-  const ts = Date.now();
-  const doc={
-    _tipo:'documento', tipoDoc:tipo,
-    numero:document.getElementById('doc-numero')?.value||'',
-    ano:document.getElementById('doc-ano')?.value||'',
-    fornecedor:document.getElementById('doc-fornecedor')?.value||'',
-    cnpj:document.getElementById('doc-cnpj')?.value||'',
-    banco:document.getElementById('doc-banco')?.value||'',
-    conta:document.getElementById('doc-conta')?.value||'',
-    descricao:document.getElementById('doc-descricao')?.value||'',
-    dataRecebimento:document.getElementById('doc-data-recebimento')?.value||'',
-    usuario:currentUser||'Sistema',
-    dataHora:new Date().toLocaleString('pt-BR'),
-    hora:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),
-    ts
-  };
-  p.documentos.push(doc);
-  saveProcessos();closeModal('modal-add-documento-proc');
-  addAudit('registrou','Processo',`Doc: ${getDocLabel(tipo)} — ${p.numero}/${p.ano}`,'');
-  showToast('✓','Documento adicionado!','','rgba(16,185,129,.4)');
-  renderPdTab(p,'tramitacoes');
-};
-window.removeDocumento = function(idx){
-  const p=processos.find(x=>String(x.id)===String(currentProcessoId));if(!p)return;
-  if(idx<0||!p.documentos[idx])return;
-  if(!confirm('Remover este documento?'))return;
-  p.documentos.splice(idx,1);saveProcessos();
-  showToast('✕','Documento removido.','','rgba(239,68,68,.4)');
-  renderPdTab(p,'tramitacoes');
-};
-// Empenho
-window.openEditEmpenho = function(){
-  const p=processos.find(x=>String(x.id)===String(currentProcessoId));if(!p)return;
-  const emp=p.empenho||{};
-  const nEl=document.getElementById('emp-numero');if(nEl)nEl.value=emp.numero||'';
-  const aEl=document.getElementById('emp-ano');if(aEl)aEl.value=emp.ano||new Date().getFullYear();
-  openModal('modal-edit-empenho');
-};
-window.saveEmpenho = function(){
-  const numero=document.getElementById('emp-numero')?.value.trim();
-  if(!numero){showToast('⚠','Informe o número.','','rgba(245,158,11,.4)');return;}
-  const p=processos.find(x=>String(x.id)===String(currentProcessoId));if(!p)return;
-  p.empenho={numero,ano:document.getElementById('emp-ano')?.value||''};
-  if(p.tipo!=='compra')p.tipo='compra';
-  saveProcessos();closeModal('modal-edit-empenho');
-  addAudit('registrou','Processo',`Empenho ${numero} — ${p.numero}/${p.ano}`,'');
-  showToast('✓','Empenho registrado!','','rgba(16,185,129,.4)');
-  renderCompraPainel(p);
-};
-// AF
-window.openEditAFProcesso = function(){
-  const p=processos.find(x=>String(x.id)===String(currentProcessoId));if(!p)return;
-  const af=p.af||{};
-  ['af-numero','af-ano','af-fornecedor','af-descricao'].forEach(id=>{
-    const key=id.replace('af-','');const el=document.getElementById(id);if(el)el.value=af[key]||'';
-  });
-  openModal('modal-edit-af-proc');
-};
-window.saveAFProcesso = function(){
-  const numero=document.getElementById('af-numero')?.value.trim();
-  if(!numero){showToast('⚠','Informe o número da AF.','','rgba(245,158,11,.4)');return;}
-  const p=processos.find(x=>String(x.id)===String(currentProcessoId));if(!p)return;
-  p.af={numero,ano:document.getElementById('af-ano')?.value||'',fornecedor:document.getElementById('af-fornecedor')?.value||'',descricao:document.getElementById('af-descricao')?.value||''};
-  if(p.tipo!=='compra')p.tipo='compra';
-  saveProcessos();closeModal('modal-edit-af-proc');
-  addAudit('registrou','Processo',`AF ${numero} — ${p.numero}/${p.ano}`,'');
-  showToast('✓','AF registrada!','','rgba(16,185,129,.4)');
-  renderCompraPainel(p);
-};
-// NF
-window.openEditNFProcesso = function(){
-  const p=processos.find(x=>String(x.id)===String(currentProcessoId));if(!p)return;
-  const nf=p.notaFiscal||{};
-  ['nfp-numero','nfp-ano','nfp-fornecedor','nfp-cnpj','nfp-banco','nfp-conta'].forEach(id=>{
-    const key=id.replace('nfp-','');const el=document.getElementById(id);if(el)el.value=nf[key]||'';
-  });
-  const drEl=document.getElementById('nfp-data-recebimento');if(drEl)drEl.value=nf.dataRecebimento||'';
-  openModal('modal-edit-nf-proc');
-};
-window.saveNFProcesso = function(){
-  const numero=document.getElementById('nfp-numero')?.value.trim();
-  if(!numero){showToast('⚠','Informe o número da NF.','','rgba(245,158,11,.4)');return;}
-  const p=processos.find(x=>String(x.id)===String(currentProcessoId));if(!p)return;
-  p.notaFiscal={numero,ano:document.getElementById('nfp-ano')?.value||'',fornecedor:document.getElementById('nfp-fornecedor')?.value||'',cnpj:document.getElementById('nfp-cnpj')?.value||'',banco:document.getElementById('nfp-banco')?.value||'',conta:document.getElementById('nfp-conta')?.value||'',dataRecebimento:document.getElementById('nfp-data-recebimento')?.value||''};
-  if(p.tipo!=='compra')p.tipo='compra';
-  saveProcessos();closeModal('modal-edit-nf-proc');
-  addAudit('registrou','Processo',`NF ${numero} — ${p.numero}/${p.ano}`,'');
-  showToast('✓','Nota Fiscal registrada!','','rgba(16,185,129,.4)');
-  renderCompraPainel(p);
-};
-// Pagamento
-window.openEditPagProcesso = function(){
-  const p=processos.find(x=>String(x.id)===String(currentProcessoId));if(!p)return;
-  const pag=p.pagamento||{};
-
-  // Pre-fill dates
-  const envioEl=document.getElementById('pag-proc-data-envio');
-  if(envioEl) envioEl.value = pag.dataEnvioPag||isoFmt(today);
-  const compEl=document.getElementById('pag-proc-data-comp');
-  if(compEl) compEl.value = pag.dataComprovante||isoFmt(today);
-  const obsEnvioEl=document.getElementById('pag-proc-obs-envio');
-  if(obsEnvioEl) obsEnvioEl.value='';
-  const obsCompEl=document.getElementById('pag-proc-obs-comp');
-  if(obsCompEl) obsCompEl.value='';
-
-  // Show current status
-  const statusEl=document.getElementById('pag-status-atual');
-  if(statusEl){
-    if(pag.recebidoComprovante){
-      statusEl.innerHTML='<span style="color:var(--green-light);font-weight:600">✅ Pagamento confirmado em '+new Date(pag.dataComprovante+'T00:00').toLocaleDateString('pt-BR')+'</span>';
-    } else if(pag.dataEnvioPag){
-      const alerta=checkPrazoPagamento(pag.dataEnvioPag);
-      statusEl.innerHTML='<span style="color:var(--amber-light);font-weight:600">💸 Enviado para pagamento em '+new Date(pag.dataEnvioPag+'T00:00').toLocaleDateString('pt-BR')+'</span>'
-        +(alerta?'<span style="margin-left:10px;color:var(--red-light);font-weight:600">'+alerta+'</span>':'');
-    } else {
-      statusEl.innerHTML='<span style="color:var(--text-muted)">⚪ Nenhum pagamento registrado ainda</span>';
-    }
-  }
-  openModal('modal-edit-pag-proc');
-};
-
-window.registrarEnvioPagamento = function(){
-  const data=document.getElementById('pag-proc-data-envio')?.value;
-  if(!data){showToast('⚠','Informe a data de envio.','','rgba(245,158,11,.4)');return;}
-  const p=processos.find(x=>String(x.id)===String(currentProcessoId));if(!p)return;
-  const obs=document.getElementById('pag-proc-obs-envio')?.value||'';
-  const ts=Date.now();
-  if(!p.pagamento) p.pagamento={};
-  p.pagamento.dataEnvioPag=data;
-  p.pagamento.recebidoComprovante=false;
-  p.pagamento.obsEnvio=obs;
-  p.pagamento.tsEnvio=ts;
-  if(p.tipo!=='compra') p.tipo='compra';
-  // Add to timeline as pagamento event
-  if(!p.tramitacoes) p.tramitacoes=[];
-  p.tramitacoes.push({
-    _tipo:'pagamento',
-    data,
-    destino:'Pagamento',
-    obs:'💸 Nota Fiscal enviada para pagamento'+(obs?' — '+obs:''),
-    usuario:currentUser||'Sistema',
-    dataHora:new Date().toLocaleString('pt-BR'),
-    hora:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),
-    ts
-  });
-  saveProcessos();renderProcessosList();
-  closeModal('modal-edit-pag-proc');
-  addAudit('registrou','Processo',`Enviado para pagamento — ${p.numero}/${p.ano}`,`Data: ${new Date(data+'T00:00').toLocaleDateString('pt-BR')}`);
-  showToast('💸','Enviado para pagamento!','Alerta automático em 30 dias.','rgba(59,130,246,.5)');
-  renderPdTab(p,'tramitacoes');
-  if(document.getElementById('pd-compra-inner')) renderCompraPainel(p);
-};
-
-window.registrarComprovantePagamento = function(){
-  const data=document.getElementById('pag-proc-data-comp')?.value;
-  if(!data){showToast('⚠','Informe a data de recebimento.','','rgba(245,158,11,.4)');return;}
-  const p=processos.find(x=>String(x.id)===String(currentProcessoId));if(!p)return;
-  const obs=document.getElementById('pag-proc-obs-comp')?.value||'';
-  const ts=Date.now();
-  if(!p.pagamento) p.pagamento={};
-  p.pagamento.recebidoComprovante=true;
-  p.pagamento.dataComprovante=data;
-  p.pagamento.obsComp=obs;
-  // Add to timeline as conclusão de pagamento
-  if(!p.tramitacoes) p.tramitacoes=[];
-  p.tramitacoes.push({
-    _tipo:'pagamento_ok',
-    data,
-    destino:'Pagamento',
-    obs:'✅ Comprovante de pagamento recebido'+(obs?' — '+obs:''),
-    usuario:currentUser||'Sistema',
-    dataHora:new Date().toLocaleString('pt-BR'),
-    hora:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),
-    ts
-  });
-  saveProcessos();renderProcessosList();
-  closeModal('modal-edit-pag-proc');
-  addAudit('registrou','Processo',`Pagamento concluído — ${p.numero}/${p.ano}`,`Comprovante em: ${new Date(data+'T00:00').toLocaleDateString('pt-BR')}`);
-  showToast('✅','Pagamento concluído!','Comprovante registrado.','rgba(16,185,129,.5)');
-  renderPdTab(p,'tramitacoes');
-  if(document.getElementById('pd-compra-inner')) renderCompraPainel(p);
-};
-
-window.togglePagComprovante = function(){};
-window.ativarCompra = function(id){
-  const p=processos.find(x=>String(x.id)===String(id));if(!p)return;
-  p.tipo='compra';
-  saveProcessos();
-  renderProcessoDetalhe(p);
-  showToast('✓','Processo de compra ativado!','Preencha Empenho, AF, NF e Pagamento abaixo.','rgba(16,185,129,.4)');
-};
-window.toggleCompraPainel = function(){
-  const inner=document.getElementById('pd-compra-inner');
-  const icon=document.getElementById('compra-toggle-icon');
-  if(!inner)return;
-  const isOpen=inner.style.display!=='none';
-  inner.style.display=isOpen?'none':'block';
-  if(icon)icon.textContent=isOpen?'▶':'▼';
-};
-window.desfazerUltimoRegistro = function(id){
-  const p = processos.find(x=>String(x.id)===String(id));
-  if(!p) return;
-
-  // Merge all events with their array reference and index
-  const allEvs = [
-    ...(p.tramitacoes||[]).map((e,i)=>({e,arr:'tramitacoes',i,ts:e.ts||0,dh:e.dataHora||''})),
-    ...(p.retornos||[]).map((e,i)=>({e,arr:'retornos',i,ts:e.ts||0,dh:e.dataHora||''})),
-    ...(p.tratativas||[]).map((e,i)=>({e,arr:'tratativas',i,ts:e.ts||0,dh:e.dataHora||''})),
-    ...(p.documentos||[]).map((e,i)=>({e,arr:'documentos',i,ts:e.ts||0,dh:e.dataHora||''})),
-  ];
-  if(allEvs.length===0){ showToast('⚠','Nenhum registro para desfazer.','','rgba(245,158,11,.4)'); return; }
-
-  // Find the most recent entry
-  const last = allEvs.sort((a,b)=>{
-    if(a.ts&&b.ts) return b.ts-a.ts;
-    return (b.dh||'').localeCompare(a.dh||'');
-  })[0];
-
-  const tipoLabels = {tramitacoes:'tramitação',retornos:'retorno',tratativas:'tratativa',documentos:'documento'};
-  const label = tipoLabels[last.arr]||last.arr;
-  if(!confirm(`Desfazer o último registro (${label})? Esta ação não pode ser desfeita.`)) return;
-
-  p[last.arr].splice(last.i, 1);
-  saveProcessos();
-  renderPdTab(p,'tramitacoes');
-  addAudit('desfez','Processo',`Desfez ${label} — ${p.numero}/${p.ano}`,'');
-  showToast('↺',`Último ${label} removido.`,'','rgba(245,158,11,.4)');
-};
-
-window.arquivarProcessoFinal = function(id){
-  if(!confirm('Arquivar processo? Ele será marcado como finalizado.'))return;
-  const p=processos.find(x=>String(x.id)===String(id));if(!p)return;
-  p.status='finalizado';
-  saveProcessos();renderProcessosList();
-  addAudit('arquivou','Processo',`Processo arquivado: ${p.numero}/${p.ano}`,'');
-  showToast('✓','📁 Processo arquivado!','','rgba(16,185,129,.4)');
-  showPage('processos',null);
-};
-
-// ===== ALERT for 30-day payment deadline =====
-function checkProcessoAlerts(){
-  if(!currentUser) return;
-  const urgentes = processos.filter(p=>{
-    if(p.status==='finalizado'||p.status==='arquivado') return false;
-    if(!p.pagamento?.dataEnvioPag) return false;
-    const alerta = checkPrazoPagamento(p.pagamento.dataEnvioPag);
-    return alerta && alerta.includes('⚠');
-  });
-  if(urgentes.length>0){
-    showToast('💰',`${urgentes.length} pagamento${urgentes.length>1?'s':''} VENCIDO${urgentes.length>1?'S':''}!`,`Processo ${urgentes[0].numero}/${urgentes[0].ano}`,'rgba(239,68,68,.5)');
-  }
-}
-
-// Load in init
-function loadProcessosInit(){
-  loadProcessos();
-  renderProcessosList();
-  setTimeout(checkProcessoAlerts, 2000);
-  setInterval(checkProcessoAlerts, 30*60*1000);
-}
-
-
-
 // ===== MÓDULO CONTRATOS =====
 let contratos = [];
 let contratoNextId = 1;
 let contratoFilter = 'todos';
+let _contratoAtivoId = null;
 
 function loadContratos(){
-  try{const s=localStorage.getItem('gf_contratos');if(s){contratos=JSON.parse(s);contratoNextId=Math.max(...contratos.map(c=>c.id||0),0)+1;}}catch(e){}
+  try{const s=localStorage.getItem('gf_contratos');if(s){contratos=JSON.parse(s);contratoNextId=Math.max(...contratos.map(c=>Number(c.id)||0),0)+1;}}catch(e){}
 }
 function saveContratos(){
   try{localStorage.setItem('gf_contratos',JSON.stringify(contratos));}catch(e){}
+  if(FIREBASE_ENABLED) fbSaveAll('contratos', contratos);
+}
+
+// Calcula dias até vencimento baseado na data de HOJE (sempre atualizado)
+function contratosDias(c){
+  if(!c.vigencia) return null;
+  const now = new Date();
+  const hoje = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const venc = new Date(c.vigencia + 'T00:00:00');
+  return Math.round((venc - hoje)/(1000*60*60*24));
 }
 
 function contratoStatus(c){
-  if(!c.vigencia) return 'vigente';
-  const venc = new Date(c.vigencia+'T00:00');
-  const diff = Math.round((venc - today)/(1000*60*60*24));
-  if(diff < 0) return 'encerrado';
-  if(diff <= 30) return 'vencendo';
+  if(c.arquivado) return 'arquivado';
+  const d = contratosDias(c);
+  if(d === null) return 'vigente';
+  if(d < 0)    return 'encerrado';
+  if(d <= 30)  return 'critico';
+  if(d <= 60)  return 'urgente';
+  if(d <= 90)  return 'atencao';
   return 'vigente';
 }
 
+// Contagem regressiva formatada para a tabela
 function contratoAlertLabel(c){
-  if(!c.vigencia) return '';
-  const venc = new Date(c.vigencia+'T00:00');
-  const diff = Math.round((venc - today)/(1000*60*60*24));
-  if(diff < 0) return `<span style="color:var(--red-light);font-size:11px">Encerrado há ${Math.abs(diff)}d</span>`;
-  if(diff <= 30) return `<span style="color:var(--amber-light);font-size:11px;font-weight:600">⚠ Vence em ${diff}d</span>`;
-  return `<span style="font-size:11px;color:var(--text-muted)">${new Date(c.vigencia+'T00:00').toLocaleDateString('pt-BR')}</span>`;
+  if(c.arquivado){
+    return '<span class="tag tag-gray" style="font-size:10px">📁 Arquivado</span>';
+  }
+  const d = contratosDias(c);
+  if(d === null){
+    return '<span style="font-size:10px;color:var(--text-faint)">Sem vigência</span>';
+  }
+  const dt = new Date(c.vigencia+'T00:00:00').toLocaleDateString('pt-BR');
+  if(d < 0){
+    return '<div style="text-align:center">'
+      + '<div style="color:var(--red-light);font-size:11px;font-weight:700">🔴 VENCIDO</div>'
+      + '<div style="color:var(--red-light);font-size:10px">há '+Math.abs(d)+' dias</div>'
+      + '<div style="font-size:9px;color:var(--text-faint)">'+dt+'</div></div>';
+  }
+  if(d === 0){
+    return '<div style="text-align:center">'
+      + '<div style="color:var(--red-light);font-size:11px;font-weight:700">🚨 VENCE HOJE</div>'
+      + '<div style="font-size:9px;color:var(--text-faint)">'+dt+'</div></div>';
+  }
+  const cor = d<=30?'var(--red-light)':d<=60?'var(--amber-light)':d<=90?'#FCD34D':'var(--green-light)';
+  const icon = d<=30?'🚨':d<=60?'⚠️':d<=90?'⏰':'✓';
+  const label = d<=30?'CRÍTICO':d<=60?'URGENTE':d<=90?'ATENÇÃO':'OK';
+  return '<div style="text-align:center">'
+    + '<div style="color:'+cor+';font-size:11px;font-weight:700">'+icon+' '+d+' dias</div>'
+    + '<div style="color:'+cor+';font-size:9px">'+label+'</div>'
+    + '<div style="font-size:9px;color:var(--text-faint)">'+dt+'</div></div>';
 }
 
 window.filterContratos = function(btn, filter){
@@ -4025,52 +3633,179 @@ function renderContratos(){
   const tbody = document.getElementById('contratos-table-body');
   if(!tbody) return;
 
-  // Update filter counts
-  const counts = {todos:contratos.length, vigente:0, vencendo:0, encerrado:0};
-  contratos.forEach(c=>{ const st=contratoStatus(c); if(counts[st]!==undefined)counts[st]++; });
+  const counts = {todos:0,vigente:0,atencao:0,urgente:0,critico:0,encerrado:0,arquivado:0};
+  contratos.forEach(c=>{ counts.todos++; const st=contratoStatus(c); if(counts[st]!==undefined)counts[st]++; });
+
   document.querySelectorAll('#contratos-filters .filter-btn').forEach(btn=>{
     const f=btn.dataset.cof; if(!f) return;
     let b=btn.querySelector('.ccof');
     if(!b){b=document.createElement('span');b.className='ccof';b.style.cssText='display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:9px;font-size:10px;font-weight:600;margin-left:5px;padding:0 4px;background:rgba(255,255,255,.12)';btn.appendChild(b);}
-    b.textContent = counts[f]!==undefined?counts[f]:counts.todos;
+    b.textContent = counts[f]!==undefined ? counts[f] : counts.todos;
   });
 
   let filtered = contratoFilter==='todos' ? contratos : contratos.filter(c=>contratoStatus(c)===contratoFilter);
   const label=document.getElementById('contratos-count-label');
-  if(label) label.textContent=`${filtered.length} contrato${filtered.length!==1?'s':''}`;
+  if(label) label.textContent=filtered.length+' contrato'+(filtered.length!==1?'s':'');
 
-  // Badge
-  const vencendo = contratos.filter(c=>contratoStatus(c)==='vencendo').length;
+  const alertas = contratos.filter(c=>!c.arquivado && contratosDias(c)!==null && contratosDias(c)<=90).length;
   const badge=document.getElementById('badge-contratos');
-  if(badge){badge.textContent=vencendo;badge.style.display=vencendo>0?'inline-flex':'none';}
+  if(badge){badge.textContent=alertas;badge.style.display=alertas>0?'inline-flex':'none';}
 
-  if(filtered.length===0){tbody.innerHTML='<tr class="no-results"><td colspan="11">Nenhum contrato encontrado.</td></tr>';return;}
+  if(filtered.length===0){tbody.innerHTML='<tr class="no-results"><td colspan="15" style="text-align:center;padding:32px;color:var(--text-muted)">Nenhum contrato cadastrado.</td></tr>';return;}
 
-  tbody.innerHTML = filtered.map(c=>{
-    const st = contratoStatus(c);
-    const stCls = st==='vigente'?'status-done':st==='vencendo'?'status-overdue':'status-pending';
-    const stLbl = st==='vigente'?'Vigente':st==='vencendo'?'⚠ Vencendo':'Encerrado';
+  const rows = filtered.map(c=>{
+    const nivel = contratoStatus(c);
+    const rowStyle = nivel==='encerrado'||nivel==='vencido'?'background:rgba(239,68,68,.06)':
+                     nivel==='critico'?'background:rgba(239,68,68,.04)':
+                     nivel==='urgente'?'background:rgba(245,158,11,.04)':
+                     nivel==='atencao'?'background:rgba(252,211,77,.03)':'';
+    const stMap = {vigente:'status-done',atencao:'status-analysis',urgente:'status-pending',critico:'status-overdue',encerrado:'status-tramit',arquivado:'status-pending'};
+    const stLbl = {vigente:'Vigente',atencao:'⏰ Atenção',urgente:'⚠ Urgente',critico:'🚨 Crítico',encerrado:'Encerrado',arquivado:'📁 Arquivado'};
     const valorFmt = c.valorTotal ? 'R$ '+Number(c.valorTotal).toLocaleString('pt-BR',{minimumFractionDigits:2}) : '—';
-    return `<tr>
-      <td style="font-family:monospace;font-size:12px">${c.processo||'—'}</td>
-      <td style="font-size:12px;font-weight:500">${c.contrato||'—'}</td>
-      <td style="max-width:260px"><div style="font-size:12px;line-height:1.4;white-space:normal">${c.objeto||'—'}</div>
-        ${c.fundamento?`<div style="font-size:10px;color:var(--text-faint);margin-top:2px">${c.fundamento}</div>`:''}
-      </td>
-      <td style="font-size:12px">${c.empresa||'—'}</td>
-      <td style="font-size:11px">${c.secretaria||'—'}</td>
-      <td style="font-size:12px">${c.assinatura?new Date(c.assinatura+'T00:00').toLocaleDateString('pt-BR'):'—'}</td>
-      <td>${contratoAlertLabel(c)}</td>
-      <td style="font-size:12px;font-weight:500">${valorFmt}</td>
-      <td style="font-size:12px;text-align:center">${c.realizado!=null?c.realizado+'%':'—'}</td>
-      <td><span class="status ${stCls}" style="font-size:10px">${stLbl}</span></td>
-      <td style="white-space:nowrap">
-        <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px;color:var(--accent-light)" onclick="editContrato('${c.id}')">✎</button>
-        <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px;color:var(--red-light)" onclick="deleteContrato('${c.id}')">✕</button>
-      </td>
-    </tr>`;
-  }).join('');
+    const totalPagoFmt = c.totalPago ? 'R$ '+Number(c.totalPago).toLocaleString('pt-BR',{minimumFractionDigits:2}) : '—';
+    const saldoVal = (c.valorTotal && c.totalPago) ? Number(c.valorTotal)-Number(c.totalPago) : null;
+    const saldoFmt = saldoVal!==null ? 'R$ '+saldoVal.toLocaleString('pt-BR',{minimumFractionDigits:2}) : '—';
+    const anoFmt = c.ano||(c.assinatura?c.assinatura.substring(0,4):'—');
+    const aditCount = (c.aditamentos||[]).length;
+    const aditTag = aditCount>0 ? '<span class="tag tag-teal" style="font-size:9px;margin-left:3px">'+aditCount+'° aditamento</span>' : '';
+    const obsRow = c.obs ? '<tr style="'+rowStyle+'"><td colspan="15" style="padding:4px 14px 8px;font-size:11px;color:var(--text-muted);font-style:italic">📝 '+c.obs+'</td></tr>' : '';
+    const motivoRow = c.motivoNaoRenovar ? '<tr style="'+rowStyle+'"><td colspan="15" style="padding:4px 14px 8px;font-size:11px;color:var(--red-light);font-style:italic">✕ Não renovado: '+c.motivoNaoRenovar+'</td></tr>' : '';
+
+    return '<tr style="'+rowStyle+'">'
+      + '<td style="font-size:13px;font-weight:700;text-align:center;color:var(--accent-light)">'+( c.contrato||'—')+aditTag+'</td>'
+      + '<td style="font-size:12px;text-align:center;color:var(--text-muted)">'+anoFmt+'</td>'
+      + '<td style="font-size:11px;text-align:center"><span class="tag tag-blue" style="font-size:10px">'+(c.secretaria||'—')+'</span></td>'
+      + '<td style="font-family:monospace;font-size:11px;text-align:center;color:var(--text-muted)">'+(c.processo||'—')+'</td>'
+      + '<td style="font-size:12px;font-weight:500">'+(c.empresa||'—')+'</td>'
+      + '<td style="max-width:280px"><div style="font-size:11.5px;line-height:1.4;white-space:normal;word-break:break-word">'+(c.objeto||'—')+'</div></td>'
+      + '<td style="font-size:11px;color:var(--text-muted);max-width:160px"><div style="white-space:normal;line-height:1.3">'+(c.fundamento||'—')+'</div></td>'
+      + '<td style="font-size:11px;text-align:center">'+(c.assinatura?new Date(c.assinatura+'T00:00:00').toLocaleDateString('pt-BR'):'—')+'</td>'
+      + '<td>'+contratoAlertLabel(c)+'</td>'
+      + '<td style="font-size:12px;font-weight:600;text-align:right">'+valorFmt+'</td>'
+      + '<td style="font-size:12px;text-align:center;color:var(--green-light)">'+(c.realizado!=null&&c.realizado!==''?c.realizado+'%':'—')+'</td>'
+      + '<td style="font-size:12px;text-align:center;color:var(--amber-light)">'+(c.aRealizar?c.aRealizar+'%':'—')+'</td>'
+      + '<td style="font-size:12px;text-align:right;color:var(--teal-light)">'+totalPagoFmt+'</td>'
+      + '<td style="font-size:12px;text-align:right;font-weight:500;color:'+(saldoVal>0?'var(--amber-light)':saldoVal===0?'var(--green-light)':'var(--text-muted)')+'">'+saldoFmt+'</td>'
+      + '<td style="white-space:nowrap">'
+      + '<button class="btn btn-ghost" style="padding:4px 8px;font-size:12px;color:var(--accent-light)" onclick="editContrato(\''+c.id+'\')">✎</button>'
+      + (!c.arquivado ? '<button class="btn btn-ghost" style="padding:4px 8px;font-size:11px;color:var(--amber-light)" title="Renovação/Aditamento" onclick="abrirModalRenovacao(\''+c.id+'\')">↻</button>' : '')
+      + '<button class="btn btn-ghost" style="padding:4px 8px;font-size:12px;color:var(--red-light)" onclick="deleteContrato(\''+c.id+'\')">✕</button>'
+      + '</td></tr>'
+      + obsRow + motivoRow;
+  });
+  tbody.innerHTML = rows.join('');
 }
+
+// ===== MODAL DE RENOVAÇÃO / ADITAMENTO =====
+window.abrirModalRenovacao = function(id){
+  const c = contratos.find(x=>String(x.id)===String(id));
+  if(!c) return;
+  _contratoAtivoId = String(id);
+  const d = contratosDias(c);
+
+  // Monta conteúdo do modal dinamicamente
+  const modal = document.getElementById('modal-ct-renovar');
+  if(!modal) return;
+
+  const cor = d===null?'var(--text-muted)':d<0?'var(--red-light)':d<=30?'var(--red-light)':d<=60?'var(--amber-light)':d<=90?'#FCD34D':'var(--green-light)';
+  const diasTxt = d===null?'Sem data de vigência':d<0?'VENCIDO há '+Math.abs(d)+' dias':d===0?'Vence HOJE':d+' dias para vencer';
+  const aditamentos = c.aditamentos||[];
+
+  let aditHtml = '';
+  if(aditamentos.length>0){
+    aditHtml = '<div style="margin-bottom:16px"><div style="font-size:11px;font-weight:600;color:var(--text-faint);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">Histórico de Aditamentos</div>';
+    aditamentos.forEach(function(a,i){
+      aditHtml += '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 12px;margin-bottom:6px;font-size:12px">'
+        + '<span style="font-weight:600;color:var(--teal-light)">'+( i+1)+'° Aditamento</span>'
+        + ' &nbsp;|&nbsp; Ass: '+(a.assinatura?new Date(a.assinatura+'T00:00:00').toLocaleDateString('pt-BR'):'—')
+        + ' &nbsp;|&nbsp; Nova vigência: '+(a.vigencia?new Date(a.vigencia+'T00:00:00').toLocaleDateString('pt-BR'):'—')
+        + (a.obs?' &nbsp;|&nbsp; <span style="color:var(--text-muted)">'+a.obs+'</span>':'')
+        + '</div>';
+    });
+    aditHtml += '</div>';
+  }
+
+  modal.querySelector('.modal-body').innerHTML = '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:14px">'
+    + '<div style="font-weight:600;font-size:13px;margin-bottom:4px">'+(c.contrato||'Contrato')+' — '+(c.empresa||'')+'</div>'
+    + '<div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">'+(c.objeto||'')+'</div>'
+    + '<div style="font-size:13px;font-weight:700;color:'+cor+'">⏱ '+diasTxt+'</div>'
+    + '<div style="font-size:11px;color:var(--text-faint);margin-top:2px">Vigência atual: '+(c.vigencia?new Date(c.vigencia+'T00:00:00').toLocaleDateString('pt-BR'):'não informada')+'</div>'
+    + '</div>'
+    + aditHtml
+    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">'
+    + '<button onclick="mostrarFormAditamento()" style="padding:12px;background:rgba(16,185,129,.15);color:var(--green-light);border:1px solid rgba(16,185,129,.3);border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">📋 Contrato Aditado</button>'
+    + '<button onclick="mostrarFormNaoRenovar()" style="padding:12px;background:rgba(239,68,68,.12);color:var(--red-light);border:1px solid rgba(239,68,68,.25);border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">✕ Não será aditado</button>'
+    + '</div>'
+    + '<div id="form-aditamento" style="display:none;background:var(--surface2);border:1px solid rgba(16,185,129,.3);border-radius:8px;padding:14px;margin-bottom:10px">'
+    + '<div style="font-size:12px;font-weight:600;color:var(--green-light);margin-bottom:12px">📋 Registrar Aditamento</div>'
+    + '<div class="form-row">'
+    + '<div class="form-group"><label class="form-label">Data de Assinatura do Aditamento</label><input class="form-input" id="adit-assinatura" type="date"></div>'
+    + '<div class="form-group"><label class="form-label">Nova Data de Vigência <span class="req">*</span></label><input class="form-input" id="adit-vigencia" type="date"></div>'
+    + '</div>'
+    + '<div class="form-group"><label class="form-label">Observações do Aditamento</label><input class="form-input" id="adit-obs" type="text" placeholder="Ex: Reajuste de valor, prorrogação de prazo..."></div>'
+    + '<button onclick="confirmarAditamento()" class="btn btn-success" style="width:100%">✓ Registrar Aditamento</button>'
+    + '</div>'
+    + '<div id="form-nao-renovar" style="display:none;background:var(--surface2);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:14px">'
+    + '<div style="font-size:12px;font-weight:600;color:var(--red-light);margin-bottom:12px">✕ Não será aditado</div>'
+    + '<div class="form-group"><label class="form-label">Motivo <span class="req">*</span></label><textarea class="form-textarea" id="motivo-nao-renovar" placeholder="Ex: Serviço concluído, substituído por novo contrato, desnecessário..." style="min-height:70px"></textarea></div>'
+    + '<button onclick="confirmarNaoRenovar()" class="btn btn-danger" style="width:100%">📁 Registrar e Arquivar</button>'
+    + '</div>';
+
+  openModal('modal-ct-renovar');
+};
+
+window.mostrarFormAditamento = function(){
+  document.getElementById('form-aditamento').style.display='block';
+  document.getElementById('form-nao-renovar').style.display='none';
+  // Pré-preenche data de assinatura com hoje
+  const hoje = new Date();
+  const hStr = hoje.toISOString().split('T')[0];
+  const el = document.getElementById('adit-assinatura');
+  if(el) el.value = hStr;
+};
+
+window.mostrarFormNaoRenovar = function(){
+  document.getElementById('form-nao-renovar').style.display='block';
+  document.getElementById('form-aditamento').style.display='none';
+};
+
+window.confirmarAditamento = function(){
+  const novaVig = document.getElementById('adit-vigencia')?.value;
+  if(!novaVig){ showToast('⚠','Informe a nova vigência.','','rgba(245,158,11,.4)'); return; }
+  const c = contratos.find(x=>String(x.id)===String(_contratoAtivoId));
+  if(!c) return;
+  const assStr = document.getElementById('adit-assinatura')?.value || '';
+  const obsStr = document.getElementById('adit-obs')?.value || '';
+  const numAdit = (c.aditamentos||[]).length + 1;
+  if(!c.aditamentos) c.aditamentos = [];
+  c.aditamentos.push({num:numAdit, assinatura:assStr, vigencia:novaVig, obs:obsStr, registradoEm:new Date().toISOString().split('T')[0]});
+  // Atualiza vigência principal
+  c.vigencia = novaVig;
+  if(assStr) c.assinatura = assStr;
+  // Reseta alertas para contar do zero com nova vigência
+  c.alertasDisparados = [];
+  c.intendeRenovar = null;
+  c.arquivado = false;
+  saveContratos(); renderContratos();
+  closeModal('modal-ct-renovar');
+  showToast('✓',numAdit+'° Aditamento registrado!','Nova vigência: '+new Date(novaVig+'T00:00:00').toLocaleDateString('pt-BR'),'rgba(16,185,129,.4)');
+  addAudit('aditou','Contratos',c.contrato||c.objeto?.substring(0,40)||'',numAdit+'° aditamento — nova vigência: '+novaVig);
+};
+
+window.confirmarNaoRenovar = function(){
+  const motivo = document.getElementById('motivo-nao-renovar')?.value.trim();
+  if(!motivo){ showToast('⚠','Informe o motivo.','','rgba(245,158,11,.4)'); return; }
+  const c = contratos.find(x=>String(x.id)===String(_contratoAtivoId));
+  if(!c) return;
+  c.arquivado = true;
+  c.motivoNaoRenovar = motivo;
+  c.arquivadoEm = new Date().toISOString().split('T')[0];
+  c.intendeRenovar = false;
+  saveContratos(); renderContratos();
+  closeModal('modal-ct-renovar');
+  showToast('📁','Contrato arquivado',c.contrato||'',' — '+motivo.substring(0,50),'rgba(139,92,246,.5)');
+  addAudit('arquivou','Contratos',c.contrato||c.objeto?.substring(0,40)||'','Não renovado: '+motivo);
+};
 
 window.deleteContrato = function(id){
   if(!confirm('Excluir este contrato?')) return;
@@ -4084,66 +3819,113 @@ window.editContrato = function(id){
   const c = contratos.find(x=>String(x.id)===String(id));
   if(!c) return;
   const setV=(eid,v)=>{const el=document.getElementById(eid);if(el)el.value=v||'';};
-  setV('ct-id',c.id); setV('ct-processo',c.processo); setV('ct-contrato',c.contrato);
-  setV('ct-objeto',c.objeto); setV('ct-fundamento',c.fundamento); setV('ct-empresa',c.empresa);
-  setV('ct-secretaria',c.secretaria); setV('ct-assinatura',c.assinatura); setV('ct-vigencia',c.vigencia);
-  setV('ct-valor',c.valorTotal); setV('ct-realizado',c.realizado); setV('ct-obs',c.obs);
+  setV('ct-id',c.id); setV('ct-contrato',c.contrato); setV('ct-ano',c.ano);
+  setV('ct-secretaria',c.secretaria); setV('ct-processo',c.processo);
+  setV('ct-empresa',c.empresa); setV('ct-objeto',c.objeto); setV('ct-fundamento',c.fundamento);
+  setV('ct-assinatura',c.assinatura); setV('ct-vigencia',c.vigencia);
+  const fmtMoeda = v => v ? parseFloat(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) : '';
+  setV('ct-valor', fmtMoeda(c.valorTotal));
+  setV('ct-total-pago', fmtMoeda(c.totalPago));
+  setV('ct-realizado',c.realizado); setV('ct-a-realizar',c.aRealizar||''); setV('ct-obs',c.obs);
+  calcContrato();
   const titleEl=document.getElementById('modal-ct-title');if(titleEl)titleEl.textContent='Editar Contrato';
   openModal('modal-new-contrato');
+};
+
+window.maskMoeda = function(el){
+  let v = el.value.replace(/\D/g,'');
+  if(!v){ el.value=''; return; }
+  v = (parseInt(v)/100).toFixed(2);
+  el.value = parseFloat(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+};
+
+function parseMoeda(s){ return parseFloat((s||'').replace(/\./g,'').replace(',','.')) || 0; }
+
+window.calcContrato = function(){
+  const valor = parseMoeda(document.getElementById('ct-valor')?.value);
+  const pago  = parseMoeda(document.getElementById('ct-total-pago')?.value);
+  const real  = parseFloat(document.getElementById('ct-realizado')?.value)||0;
+  const aReal = document.getElementById('ct-a-realizar');
+  const saldo = document.getElementById('ct-saldo');
+  if(aReal && !aReal.value) aReal.value = real > 0 ? (100-real).toFixed(0) : '';
+  if(saldo) saldo.value = valor > 0 ? 'R$ '+(valor-pago).toLocaleString('pt-BR',{minimumFractionDigits:2}) : '';
 };
 
 window.saveContrato = function(){
   const objeto = document.getElementById('ct-objeto')?.value.trim();
   const empresa = document.getElementById('ct-empresa')?.value.trim();
   if(!objeto||!empresa){showToast('⚠','Campos obrigatórios','Preencha objeto e empresa.','rgba(245,158,11,.4)');return;}
-
   const idVal = document.getElementById('ct-id')?.value;
   const isEdit = !!idVal;
-
   const c = {
     id: isEdit ? idVal : contratoNextId++,
-    processo: document.getElementById('ct-processo')?.value||'',
     contrato: document.getElementById('ct-contrato')?.value||'',
-    objeto, empresa,
-    fundamento: document.getElementById('ct-fundamento')?.value||'',
+    ano: document.getElementById('ct-ano')?.value||'',
     secretaria: document.getElementById('ct-secretaria')?.value||'',
+    processo: document.getElementById('ct-processo')?.value||'',
+    empresa, objeto,
+    fundamento: document.getElementById('ct-fundamento')?.value||'',
     assinatura: document.getElementById('ct-assinatura')?.value||'',
     vigencia: document.getElementById('ct-vigencia')?.value||'',
-    valorTotal: document.getElementById('ct-valor')?.value||'',
+    valorTotal: parseMoeda(document.getElementById('ct-valor')?.value)||'',
+    totalPago: parseMoeda(document.getElementById('ct-total-pago')?.value)||'',
     realizado: document.getElementById('ct-realizado')?.value||'',
+    aRealizar: document.getElementById('ct-a-realizar')?.value||'',
     obs: document.getElementById('ct-obs')?.value||''
   };
-
   if(isEdit){
+    const existing = contratos.find(x=>String(x.id)===String(idVal));
+    if(existing){
+      c.alertasDisparados = existing.alertasDisparados||[];
+      c.aditamentos = existing.aditamentos||[];
+      c.arquivado = existing.arquivado;
+      c.motivoNaoRenovar = existing.motivoNaoRenovar;
+    }
     const idx = contratos.findIndex(x=>String(x.id)===String(idVal));
     if(idx>=0) contratos[idx]=c; else contratos.unshift(c);
   } else {
     contratos.unshift(c);
   }
-
   saveContratos(); renderContratos(); closeModal('modal-new-contrato');
-  addAudit(isEdit?'editou':'criou','Contratos',`${c.contrato||c.objeto.substring(0,40)}`,c.empresa);
+  addAudit(isEdit?'editou':'criou','Contratos',c.contrato||c.objeto.substring(0,40),c.empresa);
   showToast('✓',isEdit?'Contrato atualizado!':'Contrato cadastrado!','','rgba(16,185,129,.4)');
-
-  // Reset
-  ['ct-id','ct-processo','ct-contrato','ct-objeto','ct-fundamento','ct-empresa','ct-secretaria',
-   'ct-assinatura','ct-vigencia','ct-valor','ct-realizado','ct-obs'].forEach(id=>{
+  ['ct-id','ct-contrato','ct-ano','ct-secretaria','ct-processo','ct-empresa','ct-objeto','ct-fundamento',
+   'ct-assinatura','ct-vigencia','ct-valor','ct-total-pago','ct-realizado','ct-a-realizar','ct-saldo','ct-obs'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.value='';
   });
 };
 
+// Alertas automáticos — dispara uma vez por nível, reseta ao aditar
 function checkContratosAlert(){
   if(!currentUser) return;
-  const vencendo = contratos.filter(c=>contratoStatus(c)==='vencendo');
-  if(vencendo.length>0){
-    showToast('📃',`${vencendo.length} contrato${vencendo.length>1?'s':''} vencendo em 30 dias!`,vencendo[0].empresa||'','rgba(245,158,11,.5)');
-  }
+  const niveis = [
+    {key:'90',test:d=>d<=90&&d>60,titulo:'⏰ Atualizar documentação',cor:'rgba(252,211,77,.5)'},
+    {key:'60',test:d=>d<=60&&d>30,titulo:'⚠ Risco de perder o prazo!',cor:'rgba(245,158,11,.6)'},
+    {key:'30',test:d=>d<=30&&d>=0,titulo:'🚨 CRÍTICO — 30 dias!',cor:'rgba(239,68,68,.7)'},
+    {key:'0', test:d=>d<0,         titulo:'🔴 Contrato VENCIDO',cor:'rgba(239,68,68,.8)'},
+  ];
+  contratos.forEach(c=>{
+    if(c.arquivado) return;
+    const d = contratosDias(c);
+    if(d===null) return;
+    for(const n of niveis){
+      if(!n.test(d)) continue;
+      if((c.alertasDisparados||[]).includes(n.key)) continue;
+      if(!c.alertasDisparados) c.alertasDisparados=[];
+      c.alertasDisparados.push(n.key);
+      saveContratos();
+      showToast(n.titulo.split(' ')[0], n.titulo, (c.contrato||'')+(c.empresa?' — '+c.empresa:''), n.cor);
+      setTimeout(()=>{ abrirModalRenovacao(String(c.id)); }, 1200);
+      break;
+    }
+  });
 }
 
 function loadContratosInit(){
   loadContratos();
   renderContratos();
-  setTimeout(checkContratosAlert, 4000);
+  setTimeout(checkContratosAlert, 3000);
+  setInterval(checkContratosAlert, 6*60*60*1000);
 }
 
 
@@ -4153,8 +3935,7 @@ setTimeout(()=>{
   refreshAll();
   renderDFDHistory();
   renderEditais();
-  loadProcessosInit();
-  loadContratosInit();
+    loadContratosInit();
   // initCalendar is called inside fullLoginInit after login
   if(window._pendingLogin){
     fullLoginInit(window._pendingLogin);
@@ -4179,6 +3960,8 @@ setTimeout(()=>{
   renderDFDHistory();
   renderEditais();
   initCalendar();
+  renderLoginButtons();
+  populateRespSelects();
   if(window._pendingLogin){
     fullLoginInit(window._pendingLogin);
     window._pendingLogin = null;
@@ -4193,325 +3976,137 @@ setTimeout(()=>{
   if(atrasadas>0 && currentUser) showToast('⚠',`${atrasadas} tarefa${atrasadas>1?'s':''} vencida${atrasadas>1?'s':''}!`,'Verifique suas tarefas.','rgba(239,68,68,.5)');
 },800);
 
+// ===== SENHA: MOSTRAR/OCULTAR =====
+window.toggleSenhaLogin = function(){
+  var pw = document.getElementById('login-password');
+  if(!pw) return;
+  pw.type = pw.type==='password' ? 'text' : 'password';
+};
+window.toggleVisible = function(id){
+  var el = document.getElementById(id);
+  if(!el) return;
+  el.type = el.type==='password' ? 'text' : 'password';
+};
+
+// ===== ALTERAR MINHA PRÓPRIA SENHA =====
+window.abrirMinhaSenha = function(){
+  if(!currentUser){ showToast('⚠','Faça login primeiro.','','rgba(245,158,11,.4)'); return; }
+  ['senha-atual','senha-nova','senha-confirma'].forEach(id=>{
+    var el=document.getElementById(id); if(el){el.value='';el.type='password';}
+  });
+  var msg=document.getElementById('senha-msg'); if(msg) msg.style.display='none';
+  openModal('modal-minha-senha');
+};
+
+window.salvarMinhaSenha = function(){
+  var atual = document.getElementById('senha-atual')?.value;
+  var nova  = document.getElementById('senha-nova')?.value.trim();
+  var conf  = document.getElementById('senha-confirma')?.value.trim();
+  var msg   = document.getElementById('senha-msg');
+  function showMsg(txt, ok){
+    if(!msg) return;
+    msg.style.display='block';
+    msg.style.background = ok?'rgba(16,185,129,.12)':'rgba(239,68,68,.12)';
+    msg.style.border = ok?'1px solid rgba(16,185,129,.3)':'1px solid rgba(239,68,68,.3)';
+    msg.style.color = ok?'var(--green-light)':'var(--red-light)';
+    msg.textContent = txt;
+  }
+  var senhaArmazenada = USER_PASSWORDS[currentUser] || '';
+  var senhaDefault = currentUser.toLowerCase() + '123';
+  // Aceita a senha armazenada OU a senha padrão (nome+123, case insensitive)
+  var senhaValida = (atual === senhaArmazenada) || (atual.toLowerCase() === senhaArmazenada.toLowerCase()) || (atual.toLowerCase() === senhaDefault);
+  if(!senhaValida){ showMsg('❌ Senha atual incorreta.', false); return; }
+  if(!nova || nova.length < 4){ showMsg('❌ Nova senha deve ter pelo menos 4 caracteres.', false); return; }
+  if(nova !== conf){ showMsg('❌ As senhas não coincidem.', false); return; }
+  USER_PASSWORDS[currentUser] = nova.toLowerCase();
+  try{ localStorage.setItem('gf_user_passwords', JSON.stringify(USER_PASSWORDS)); }catch(e){}
+  showMsg('✓ Senha alterada com sucesso!', true);
+  setTimeout(()=>closeModal('modal-minha-senha'), 1500);
+  addAudit('alterou senha','Sistema','Senha alterada pelo próprio usuário',currentUser);
+  showToast('✓','Senha alterada!','Use a nova senha no próximo login.','rgba(16,185,129,.4)');
+};
+
+// ===== RECUPERAR SENHA =====
+window.abrirRecuperarSenha = function(){
+  // Preenche select de usuários
+  var sel = document.getElementById('recuperar-user');
+  if(sel){
+    sel.innerHTML = gfUsers.map(u=>'<option value="'+u.name+'">'+u.name+'</option>').join('');
+  }
+  // Só mostra área de admin se for Fabiana logada
+  var adminArea = document.getElementById('recuperar-admin-area');
+  var btnConf   = document.getElementById('btn-recuperar-confirmar');
+  var isAdmin   = currentUser === GF_ADMIN;
+  if(adminArea) adminArea.style.display = isAdmin ? 'block' : 'none';
+  if(btnConf)   btnConf.style.display   = isAdmin ? 'inline-flex' : 'none';
+  // Limpa campos
+  ['recuperar-senha-nova','recuperar-senha-admin'].forEach(id=>{
+    var el=document.getElementById(id); if(el) el.value='';
+  });
+  openModal('modal-recuperar-senha');
+};
+
+window.confirmarRecuperacao = function(){
+  var user      = document.getElementById('recuperar-user')?.value;
+  var novaSenha = document.getElementById('recuperar-senha-nova')?.value.trim();
+  var adminPw   = document.getElementById('recuperar-senha-admin')?.value;
+  if(!user || !novaSenha){ showToast('⚠','Preencha todos os campos.','','rgba(245,158,11,.4)'); return; }
+  if(novaSenha.length < 4){ showToast('⚠','Senha deve ter ao menos 4 caracteres.','','rgba(245,158,11,.4)'); return; }
+  if(adminPw !== (USER_PASSWORDS[GF_ADMIN]||'')){ showToast('❌','Senha de admin incorreta.','','rgba(239,68,68,.4)'); return; }
+  USER_PASSWORDS[user] = novaSenha.toLowerCase();
+  try{ localStorage.setItem('gf_user_passwords', JSON.stringify(USER_PASSWORDS)); }catch(e){}
+  closeModal('modal-recuperar-senha');
+  showToast('✓','Senha de '+user+' redefinida!','Use a nova senha no próximo login.','rgba(16,185,129,.4)');
+  addAudit('redefiniu senha','Sistema','Admin redefiniu senha de '+user,GF_ADMIN);
+};
+
 
 </script>
 <div id="toast" style="position:fixed;bottom:24px;right:24px;z-index:99999;background:#1a2744;border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.6);opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s;pointer-events:none;max-width:360px;min-width:220px"><span id="toast-icon" style="font-size:20px;flex-shrink:0"></span><div style="flex:1;min-width:0"><div id="toast-title" style="font-size:13.5px;font-weight:600;color:#fff"></div><div id="toast-body" style="font-size:12px;color:rgba(255,255,255,.65);margin-top:2px"></div></div></div><style>#toast.show{opacity:1!important;transform:translateY(0)!important;pointer-events:auto!important}</style>
 
 <!-- Toast Notification -->
 
-<!-- Modal Novo Processo -->
-<div class="modal-overlay" id="modal-new-processo">
-  <div class="modal" style="width:640px">
-    <div class="modal-header"><span>◎</span><span class="modal-title">Novo Processo</span><button class="modal-close" onclick="closeModal('modal-new-processo')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Número do Processo <span class="req">*</span></label><input class="form-input" id="np-numero" type="text" placeholder="Ex: 11240"></div>
-        <div class="form-group"><label class="form-label">Ano <span class="req">*</span></label><input class="form-input" id="np-ano" type="number" value="2026"></div>
-      </div>
-      <div class="form-group"><label class="form-label">Descrição do Processo <span class="req">*</span></label><textarea class="form-textarea" id="np-descricao" placeholder="Descreva o objeto/assunto do processo..."></textarea></div>
-      <div class="form-group"><label class="form-label">Tipo de Processo</label>
-        <select class="form-select" id="np-tipo">
-          <option value="geral">Processo Geral</option>
-          <option value="compra">Processo de Compra (com pagamento)</option>
-        </select>
-      </div>
-      <div style="border-top:1px solid var(--border);padding-top:14px;margin-top:4px">
-        <div style="font-size:12px;font-weight:500;color:var(--text-muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">Tramitação Inicial</div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Data da Tramitação</label><input class="form-input" id="np-data-tram" type="date"></div>
-          <div class="form-group"><label class="form-label">Destino (secretaria)</label><input class="form-input" id="np-destino" type="text" placeholder="Ex: Sec. de Fazenda"></div>
-        </div>
-        <div class="form-group"><label class="form-label">Observações iniciais</label><textarea class="form-textarea" id="np-obs-inicial" placeholder="Observações sobre a tramitação inicial..." style="min-height:60px"></textarea></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-new-processo')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveNewProcesso()">Cadastrar Processo</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal Add Tramitação -->
-<div class="modal-overlay" id="modal-add-tramitacao-proc">
-  <div class="modal" style="width:500px">
-    <div class="modal-header"><span>🔄</span><span class="modal-title">Nova Tramitação</span><button class="modal-close" onclick="closeModal('modal-add-tramitacao-proc')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Data da Tramitação <span class="req">*</span></label><input class="form-input" id="at-data" type="date"></div>
-        <div class="form-group"><label class="form-label">Destino <span class="req">*</span></label><input class="form-input" id="at-destino" type="text" placeholder="Secretaria de destino"></div>
-      </div>
-      <div class="form-group"><label class="form-label">Observação</label><textarea class="form-textarea" id="at-obs" placeholder="Motivo da tramitação, instruções..." style="min-height:80px"></textarea></div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-add-tramitacao-proc')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveTramitacaoProcesso()">Registrar Tramitação</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal Retorno -->
-<div class="modal-overlay" id="modal-add-retorno-proc">
-  <div class="modal" style="width:520px">
-    <div class="modal-header"><span>↩</span><span class="modal-title">Registrar Retorno do Processo</span><button class="modal-close" onclick="closeModal('modal-add-retorno-proc')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-group"><label class="form-label">Data de Retorno <span class="req">*</span></label><input class="form-input" id="ar-data" type="date"></div>
-      <div class="form-group"><label class="form-label">Motivo do Retorno <span class="req">*</span></label><textarea class="form-textarea" id="ar-motivo" placeholder="Por que o processo retornou?"></textarea></div>
-      <div class="form-group"><label class="form-label">Despacho Recebido</label><textarea class="form-textarea" id="ar-despacho" placeholder="Texto do despacho/exigência recebida..."></textarea></div>
-
-      <!-- CRIAR TAREFA VINCULADA -->
-      <div style="border-top:1px solid var(--border);padding-top:14px;margin-top:4px">
-        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:500;margin-bottom:10px">
-          <input type="checkbox" id="ar-criar-tarefa" onchange="toggleArTarefa()" style="accent-color:var(--accent);width:16px;height:16px">
-          <span>✅ Criar tarefa vinculada a este retorno</span>
-        </label>
-        <div id="ar-tarefa-fields" style="display:none;background:var(--surface2);border-radius:10px;padding:14px;display:none;flex-direction:column;gap:10px">
-          <div class="form-group" style="margin-bottom:0"><label class="form-label">Tarefa a executar <span class="req">*</span></label>
-            <input class="form-input" id="ar-tarefa-nome" type="text" placeholder="Ex: Assinar nota de empenho, Corrigir planilha...">
-          </div>
-          <div class="form-row" style="margin-bottom:0">
-            <div class="form-group" style="margin-bottom:0"><label class="form-label">Responsável <span class="req">*</span></label>
-              <select class="form-select" id="ar-tarefa-resp">
-                <option value="Fabiana">Fabiana</option>
-                <option value="Hicaro">Hicaro</option>
-                <option value="Karina">Karina</option>
-                <option value="Manoel">Manoel</option>
-              </select>
-            </div>
-            <div class="form-group" style="margin-bottom:0"><label class="form-label">Prazo</label>
-              <input class="form-input" id="ar-tarefa-prazo" type="date">
-            </div>
-          </div>
-          <div class="form-row" style="margin-bottom:0">
-            <div class="form-group" style="margin-bottom:0"><label class="form-label">Prioridade</label>
-              <select class="form-select" id="ar-tarefa-prio">
-                <option value="media">Média</option>
-                <option value="alta">Alta</option>
-                <option value="urgente">Urgente</option>
-                <option value="baixa">Baixa</option>
-              </select>
-            </div>
-            <div class="form-group" style="margin-bottom:0"><label class="form-label">Tipo</label>
-              <select class="form-select" id="ar-tarefa-tipo">
-                <option value="Processo">Processo</option>
-                <option value="Ofício">Ofício</option>
-                <option value="Elaborar DFD">Elaborar DFD</option>
-                <option value="Cobrar">Cobrar</option>
-                <option value="Outros">Outros</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-add-retorno-proc')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveRetornoProcesso()">Registrar Retorno</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal Tratativa -->
-<div class="modal-overlay" id="modal-add-tratativa-proc">
-  <div class="modal" style="width:520px">
-    <div class="modal-header"><span>📝</span><span class="modal-title">Registrar Tratativa</span><button class="modal-close" onclick="closeModal('modal-add-tratativa-proc')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-group"><label class="form-label">Data <span class="req">*</span></label><input class="form-input" id="atr-data" type="date"></div>
-      <div class="form-group"><label class="form-label">O que foi feito <span class="req">*</span></label><textarea class="form-textarea" id="atr-feito" placeholder="Descreva as providências tomadas, ação realizada..."></textarea></div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-add-tratativa-proc')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveTratativaProcesso()">Registrar Tratativa</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal Status Final -->
-<div class="modal-overlay" id="modal-status-final-proc">
-  <div class="modal" style="width:480px">
-    <div class="modal-header"><span>✓</span><span class="modal-title">Definir Status Final</span><button class="modal-close" onclick="closeModal('modal-status-final-proc')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Status Final <span class="req">*</span></label>
-          <select class="form-select" id="sf-status" onchange="toggleSfOutros()">
-            <option value="concluido">Concluído</option>
-            <option value="cancelado">Cancelado</option>
-            <option value="outros">Outros (especificar)</option>
-          </select>
-        </div>
-        <div class="form-group"><label class="form-label">Data</label><input class="form-input" id="sf-data" type="date"></div>
-      </div>
-      <div class="form-group extra-field" id="sf-outros-group" style="display:none">
-        <label class="form-label">Especificar status <span class="req">*</span></label>
-        <input class="form-input" id="sf-outros-texto" type="text" placeholder="Descreva o status...">
-      </div>
-      <div class="form-group"><label class="form-label">Observação / Motivo</label><textarea class="form-textarea" id="sf-obs" placeholder="Detalhes sobre o resultado..."></textarea></div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-status-final-proc')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveStatusFinal()">Confirmar Status</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal Adicionar Documento -->
-<div class="modal-overlay" id="modal-add-documento-proc">
-  <div class="modal" style="width:560px">
-    <div class="modal-header"><span>📎</span><span class="modal-title">Adicionar Documento</span><button class="modal-close" onclick="closeModal('modal-add-documento-proc')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-group"><label class="form-label">Tipo de Documento <span class="req">*</span></label>
-        <select class="form-select" id="doc-tipo" onchange="toggleDocFields()">
-          <option value="">Selecione...</option>
-          <option value="plano_trabalho">Plano de Trabalho</option>
-          <option value="boleto">Boleto</option>
-          <option value="consumo_ata">Solicitação de Consumo de Ata</option>
-          <option value="consumo">Solicitação de Consumo</option>
-          <option value="af">Autorização de Fornecimento (AF)</option>
-          <option value="nota_empenho">Nota de Empenho</option>
-          <option value="nota_fiscal">Nota Fiscal</option>
-          <option value="contrato">Contrato / Termo</option>
-        </select>
-      </div>
-      <div id="doc-grp-numero" style="display:none">
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Número</label><input class="form-input" id="doc-numero" type="text" placeholder="Número"></div>
-          <div class="form-group"><label class="form-label">Ano</label><input class="form-input" id="doc-ano" type="number" value="2026"></div>
-        </div>
-      </div>
-      <div id="doc-grp-fornecedor" style="display:none">
-        <div class="form-group"><label class="form-label">Fornecedor</label><input class="form-input" id="doc-fornecedor" type="text" placeholder="Razão social"></div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">CNPJ/CPF</label><input class="form-input" id="doc-cnpj" type="text" data-mask="cnpj"></div>
-          <div class="form-group"><label class="form-label">Banco</label><input class="form-input" id="doc-banco" type="text"></div>
-        </div>
-        <div class="form-group"><label class="form-label">Conta</label><input class="form-input" id="doc-conta" type="text"></div>
-      </div>
-      <div id="doc-grp-data" style="display:none">
-        <div class="form-group"><label class="form-label">Data de Recebimento</label><input class="form-input" id="doc-data-recebimento" type="date"></div>
-      </div>
-      <div class="form-group"><label class="form-label">Descrição / Observação</label><textarea class="form-textarea" id="doc-descricao" placeholder="Detalhes adicionais..." style="min-height:60px"></textarea></div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-add-documento-proc')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveDocumento()">Adicionar</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal Empenho -->
-<div class="modal-overlay" id="modal-edit-empenho">
-  <div class="modal" style="width:420px">
-    <div class="modal-header"><span>📝</span><span class="modal-title">Nota de Empenho</span><button class="modal-close" onclick="closeModal('modal-edit-empenho')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Número <span class="req">*</span></label><input class="form-input" id="emp-numero" type="text" placeholder="Nº do empenho"></div>
-        <div class="form-group"><label class="form-label">Ano</label><input class="form-input" id="emp-ano" type="number" value="2026"></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-edit-empenho')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveEmpenho()">Salvar</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal AF -->
-<div class="modal-overlay" id="modal-edit-af-proc">
-  <div class="modal" style="width:480px">
-    <div class="modal-header"><span>⚙</span><span class="modal-title">Autorização de Fornecimento (AF)</span><button class="modal-close" onclick="closeModal('modal-edit-af-proc')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Número <span class="req">*</span></label><input class="form-input" id="af-numero" type="text" placeholder="Ex: 001"></div>
-        <div class="form-group"><label class="form-label">Ano</label><input class="form-input" id="af-ano" type="number" value="2026"></div>
-      </div>
-      <div class="form-group"><label class="form-label">Fornecedor</label><input class="form-input" id="af-fornecedor" type="text"></div>
-      <div class="form-group"><label class="form-label">Descrição</label><textarea class="form-textarea" id="af-descricao" style="min-height:60px"></textarea></div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-edit-af-proc')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveAFProcesso()">Salvar AF</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal NF -->
-<div class="modal-overlay" id="modal-edit-nf-proc">
-  <div class="modal" style="width:540px">
-    <div class="modal-header"><span>🧾</span><span class="modal-title">Nota Fiscal</span><button class="modal-close" onclick="closeModal('modal-edit-nf-proc')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Número <span class="req">*</span></label><input class="form-input" id="nfp-numero" type="text"></div>
-        <div class="form-group"><label class="form-label">Ano</label><input class="form-input" id="nfp-ano" type="number" value="2026"></div>
-      </div>
-      <div class="form-group"><label class="form-label">Fornecedor</label><input class="form-input" id="nfp-fornecedor" type="text"></div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">CNPJ/CPF</label><input class="form-input" id="nfp-cnpj" type="text" data-mask="cnpj"></div>
-        <div class="form-group"><label class="form-label">Banco</label><input class="form-input" id="nfp-banco" type="text"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Conta</label><input class="form-input" id="nfp-conta" type="text"></div>
-        <div class="form-group"><label class="form-label">Data de Recebimento</label><input class="form-input" id="nfp-data-recebimento" type="date"></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-edit-nf-proc')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveNFProcesso()">Salvar NF</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal Pagamento Processo -->
-<div class="modal-overlay" id="modal-edit-pag-proc">
-  <div class="modal" style="width:460px">
-    <div class="modal-header"><span>💰</span><span class="modal-title">Pagamento</span><button class="modal-close" onclick="closeModal('modal-edit-pag-proc')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-group"><label class="form-label">Data de Envio para Pagamento <span class="req">*</span></label><input class="form-input" id="pag-proc-data-envio" type="date"></div>
-      <div style="padding:10px 14px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:8px;font-size:12px;color:var(--text-muted);margin-bottom:14px">
-        ⏰ O sistema irá alertar automaticamente após 30 dias sem confirmação de pagamento.
-      </div>
-      <div class="form-group">
-        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
-          <input type="checkbox" id="pag-proc-recebido" onchange="togglePagComprovante()" style="accent-color:var(--accent);width:16px;height:16px">
-          Comprovante de pagamento já recebido
-        </label>
-      </div>
-      <div id="pag-proc-grp-data" style="display:none">
-        <div class="form-group"><label class="form-label">Data do Recebimento do Comprovante</label><input class="form-input" id="pag-proc-data-comp" type="date"></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-  
 <!-- Modal Novo/Editar Contrato -->
 <div class="modal-overlay" id="modal-new-contrato">
-  <div class="modal" style="width:680px">
+  <div class="modal" style="width:720px">
     <div class="modal-header"><span>📃</span><span class="modal-title" id="modal-ct-title">Novo Contrato</span><button class="modal-close" onclick="closeModal('modal-new-contrato');document.getElementById('ct-id').value=''">✕</button></div>
     <div class="modal-body">
       <input type="hidden" id="ct-id">
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Nº Processo</label><input class="form-input" id="ct-processo" type="text" placeholder="Ex: 17.935/21"></div>
-        <div class="form-group"><label class="form-label">Nº Contrato</label><input class="form-input" id="ct-contrato" type="text" placeholder="Ex: 001/2024"></div>
+
+      <div style="font-size:11px;font-weight:600;color:var(--text-faint);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px">Identificação</div>
+      <div class="form-row" style="grid-template-columns:80px 80px 1fr 1fr">
+        <div class="form-group"><label class="form-label">Nº Contrato</label><input class="form-input" id="ct-contrato" type="text" placeholder="Ex: 85"></div>
+        <div class="form-group"><label class="form-label">Ano</label><input class="form-input" id="ct-ano" type="text" placeholder="2024" maxlength="4" style="text-align:center"></div>
+        <div class="form-group"><label class="form-label">Secretaria</label><input class="form-input" id="ct-secretaria" type="text" placeholder="Ex: SMEC, SMTER..."></div>
+        <div class="form-group"><label class="form-label">Nº Processo</label><input class="form-input" id="ct-processo" type="text" placeholder="Ex: 7.366/07"></div>
       </div>
-      <div class="form-group"><label class="form-label">Objeto / Descrição <span class="req">*</span></label><textarea class="form-textarea" id="ct-objeto" placeholder="Descreva o objeto do contrato..." style="min-height:80px"></textarea></div>
-      <div class="form-group"><label class="form-label">Fundamento Legal</label><input class="form-input" id="ct-fundamento" type="text" placeholder="Ex: Inexigibilidade, art. 25, I, Lei 8.666/93"></div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Entidade / Empresa <span class="req">*</span></label><input class="form-input" id="ct-empresa" type="text"></div>
-        <div class="form-group"><label class="form-label">Secretaria</label>
-          <select class="form-select" id="ct-secretaria">
-            <option value="SMEC">SMEC</option>
-            <option value="SMEC/SMTER">SMEC/SMTER</option>
-            <option value="SMTER">SMTER</option>
-            <option value="Outra">Outra</option>
-          </select>
-        </div>
-      </div>
+
+      <div style="font-size:11px;font-weight:600;color:var(--text-faint);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;margin-top:4px">Contratado</div>
+      <div class="form-group"><label class="form-label">Entidade / Empresa <span class="req">*</span></label><input class="form-input" id="ct-empresa" type="text" placeholder="Razão social ou nome da entidade"></div>
+
+      <div style="font-size:11px;font-weight:600;color:var(--text-faint);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;margin-top:4px">Objeto e Fundamento</div>
+      <div class="form-group"><label class="form-label">Objeto / Descrição <span class="req">*</span></label><textarea class="form-textarea" id="ct-objeto" placeholder="Descreva o objeto do contrato..." style="min-height:70px"></textarea></div>
+      <div class="form-group"><label class="form-label">Fundamento Legal</label><input class="form-input" id="ct-fundamento" type="text" placeholder="Ex: Concorrência Pública nº 2/08, Inexigibilidade art. 25 I Lei 8.666/93..."></div>
+
+      <div style="font-size:11px;font-weight:600;color:var(--text-faint);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;margin-top:4px">Datas</div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Data de Assinatura</label><input class="form-input" id="ct-assinatura" type="date"></div>
         <div class="form-group"><label class="form-label">Vigência (término)</label><input class="form-input" id="ct-vigencia" type="date"></div>
       </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Valor Contratual (R$)</label><input class="form-input" id="ct-valor" type="number" step="0.01" placeholder="0.00"></div>
-        <div class="form-group"><label class="form-label">Realizado (%)</label><input class="form-input" id="ct-realizado" type="number" min="0" max="100" placeholder="0"></div>
+
+      <div style="font-size:11px;font-weight:600;color:var(--text-faint);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;margin-top:4px">Valores Financeiros</div>
+      <div class="form-row" style="grid-template-columns:1fr 1fr 80px 80px">
+        <div class="form-group"><label class="form-label">Valor Contratual (R$)<br><span style="font-weight:400;font-size:10px">com aditamentos</span></label><input class="form-input" id="ct-valor" type="text" placeholder="0,00" oninput="maskMoeda(this);calcContrato()"></div>
+        <div class="form-group"><label class="form-label">Total Pago (R$)</label><input class="form-input" id="ct-total-pago" type="text" placeholder="0,00" oninput="maskMoeda(this);calcContrato()"></div>
+        <div class="form-group"><label class="form-label">Realizado (%)</label><input class="form-input" id="ct-realizado" type="number" min="0" max="100" placeholder="0" oninput="calcContrato()"></div>
+        <div class="form-group"><label class="form-label">A realizar (%)</label><input class="form-input" id="ct-a-realizar" type="number" min="0" max="100" placeholder="0"></div>
       </div>
-      <div class="form-group"><label class="form-label">Observações</label><textarea class="form-textarea" id="ct-obs" placeholder="Informações adicionais, aditamentos..." style="min-height:60px"></textarea></div>
+      <div class="form-group">
+        <label class="form-label">Saldo a Pagar (R$) <span style="font-size:10px;font-weight:400;color:var(--text-faint)">calculado automaticamente</span></label>
+        <input class="form-input" id="ct-saldo" type="text" readonly style="opacity:.7;cursor:not-allowed" placeholder="Calculado a partir do valor e total pago">
+      </div>
+
+      <div class="form-group"><label class="form-label">Observações / Aditamentos</label><textarea class="form-textarea" id="ct-obs" placeholder="Informações adicionais, aditamentos, situação atual..." style="min-height:55px"></textarea></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('modal-new-contrato');document.getElementById('ct-id').value=''">Cancelar</button>
@@ -4546,7 +4141,7 @@ setTimeout(()=>{
       </div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Responsável</label>
-          <select class="form-select" id="ed-resp">
+          <select class="form-select resp-select" id="ed-resp">
             <option>Fabiana</option><option>Hicaro</option><option>Karina</option><option>Manoel</option>
           </select>
         </div>
@@ -4611,5 +4206,160 @@ setTimeout(()=>{
     </div>
   </div>
 </div>
+
+<!-- Modal Gerenciar Senhas (admin Fabiana) -->
+<div class="modal-overlay" id="modal-senhas">
+  <div class="modal" style="width:480px">
+    <div class="modal-header">
+      <span>🔐</span>
+      <span class="modal-title">Gerenciar Senhas</span>
+      <button class="modal-close" onclick="closeModal('modal-senhas')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:8px;padding:12px 14px;font-size:12px;color:var(--text-muted);margin-bottom:20px">
+        🔒 Apenas você (Fabiana) tem acesso a esta tela. Altere a senha de qualquer usuário abaixo.
+      </div>
+      <div id="senhas-form" style="display:flex;flex-direction:column;gap:14px"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-senhas')">Fechar</button>
+      <button class="btn btn-primary" onclick="salvarSenhas()">💾 Salvar Senhas</button>
+    </div>
+  </div>
+</div>
+<!-- Modal Gerenciar Equipe (admin) -->
+<div class="modal-overlay" id="modal-equipe">
+  <div class="modal" style="width:520px">
+    <div class="modal-header">
+      <span>👥</span>
+      <span class="modal-title">Gerenciar Equipe</span>
+      <button class="modal-close" onclick="closeModal('modal-equipe')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--text-muted);margin-bottom:18px">
+        👑 Apenas <strong>Fabiana</strong> (admin) pode adicionar ou remover membros da equipe.
+      </div>
+
+      <!-- Lista de usuários -->
+      <div id="equipe-lista" style="margin-bottom:20px"></div>
+
+      <!-- Adicionar novo -->
+      <div style="border-top:1px solid var(--border);padding-top:16px">
+        <div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px">+ Adicionar membro</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nome <span class="req">*</span></label>
+            <input class="form-input" id="novo-user-nome" type="text" placeholder="Nome completo ou apelido">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Senha inicial <span class="req">*</span></label>
+            <input class="form-input" id="novo-user-senha" type="text" placeholder="Ex: maria123">
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="adicionarUsuario()" style="width:100%">+ Adicionar à Equipe</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-equipe')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Intenção de Aditamento -->
+<!-- Modal Renovação/Aditamento — conteúdo gerado dinamicamente por abrirModalRenovacao() -->
+<div class="modal-overlay" id="modal-ct-renovar">
+  <div class="modal" style="width:560px;max-height:90vh;overflow-y:auto">
+    <div class="modal-header">
+      <span>📋</span>
+      <span class="modal-title">Gestão de Vigência do Contrato</span>
+      <button class="modal-close" onclick="closeModal('modal-ct-renovar')">✕</button>
+    </div>
+    <div class="modal-body" id="ct-renovar-body">
+      <!-- preenchido por abrirModalRenovacao() -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-ct-renovar')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Alterar Minha Senha -->
+<div class="modal-overlay" id="modal-minha-senha">
+  <div class="modal" style="width:400px">
+    <div class="modal-header">
+      <span>🔑</span>
+      <span class="modal-title">Alterar Minha Senha</span>
+      <button class="modal-close" onclick="closeModal('modal-minha-senha')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Senha Atual</label>
+        <div style="position:relative">
+          <input class="form-input" id="senha-atual" type="password" placeholder="Digite sua senha atual" style="padding-right:40px">
+          <button onclick="toggleVisible('senha-atual')" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:14px;color:var(--text-muted)">👁</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nova Senha <span class="req">*</span></label>
+        <div style="position:relative">
+          <input class="form-input" id="senha-nova" type="password" placeholder="Mínimo 4 caracteres" style="padding-right:40px">
+          <button onclick="toggleVisible('senha-nova')" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:14px;color:var(--text-muted)">👁</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirmar Nova Senha <span class="req">*</span></label>
+        <div style="position:relative">
+          <input class="form-input" id="senha-confirma" type="password" placeholder="Repita a nova senha" style="padding-right:40px">
+          <button onclick="toggleVisible('senha-confirma')" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:14px;color:var(--text-muted)">👁</button>
+        </div>
+      </div>
+      <div id="senha-msg" style="display:none;font-size:12px;border-radius:6px;padding:8px 12px;margin-top:4px"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-minha-senha')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarMinhaSenha()">💾 Salvar Nova Senha</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Recuperar Senha (admin define nova senha) -->
+<div class="modal-overlay" id="modal-recuperar-senha">
+  <div class="modal" style="width:420px">
+    <div class="modal-header">
+      <span>🔓</span>
+      <span class="modal-title">Recuperar Senha</span>
+      <button class="modal-close" onclick="closeModal('modal-recuperar-senha')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);border-radius:8px;padding:12px 14px;font-size:12px;color:var(--amber-light);margin-bottom:18px;line-height:1.6">
+        ⚠ Esqueceu sua senha? Entre em contato com <strong>Fabiana (admin)</strong> para que ela redefina sua senha pelo painel <strong>🔐 Senhas</strong>.<br><br>
+        Ou se você é o <strong>admin</strong>, defina uma nova senha abaixo:
+      </div>
+      <div id="recuperar-admin-area">
+        <div class="form-group">
+          <label class="form-label">Usuário</label>
+          <select class="form-select" id="recuperar-user"></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nova Senha</label>
+          <div style="position:relative">
+            <input class="form-input" id="recuperar-senha-nova" type="text" placeholder="Nova senha para este usuário">
+            <button onclick="toggleVisible('recuperar-senha-nova')" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:14px;color:var(--text-muted)">👁</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Sua senha de admin (confirmação)</label>
+          <input class="form-input" id="recuperar-senha-admin" type="password" placeholder="Sua senha (Fabiana)">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-recuperar-senha')">Fechar</button>
+      <button class="btn btn-primary" id="btn-recuperar-confirmar" onclick="confirmarRecuperacao()" style="display:none">✓ Redefinir Senha</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
