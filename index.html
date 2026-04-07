@@ -375,7 +375,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);m
       </div>
       <div style="background:rgba(13,148,136,.08);border:1px solid rgba(13,148,136,.2);border-radius:var(--radius);padding:12px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-size:12.5px">
         <span style="font-size:18px">💡</span>
-        <span style="color:var(--teal-light)"><strong>Sistema multi-usuário:</strong> Para uso em tempo real por todos os 4 membros, hospede este arquivo em um servidor web ou utilize o <strong>Google Drive + GitHub Pages</strong> — cada usuário acessa pelo browser e escolhe seu perfil. Alertas funcionam individualmente por navegador.</span>
+
       </div>
       <div class="dashboard-grid">
         <div class="panel">
@@ -411,6 +411,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);m
           <button class="btn btn-primary" onclick="openModal('modal-task')">+ Nova Tarefa</button>
         </div>
       </div>
+      <div id="banner-atrasadas-tarefas"></div>
       <div class="filters" id="task-filters">
         <button class="filter-btn active" data-filter="todos" onclick="filterTasks(this,'todos')">Todos</button>
         <button class="filter-btn" data-filter="pendente" onclick="filterTasks(this,'pendente')">Pendentes</button>
@@ -826,6 +827,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);m
         <div class="form-group"><label class="form-label">Processo GIAP</label><input class="form-input" id="et-giap" type="text" placeholder="Ex: 12345/2026"></div>
       </div>
       <div class="form-group"><label class="form-label">Descrição</label><textarea class="form-textarea" id="et-desc"></textarea></div>
+    </div>
+      <div class="form-group" id="et-conclusao-group" style="display:none">
+        <label class="form-label" style="color:var(--green-light)">✅ Resposta / Providência tomada</label>
+        <div id="et-conclusao-text" style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:12px;font-size:13px;color:var(--text);line-height:1.6;white-space:pre-wrap"></div>
+        <div id="et-conclusao-data" style="font-size:11px;color:var(--text-faint);margin-top:4px"></div>
+      </div>
     </div>
     <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-edit-task')">Cancelar</button><button class="btn btn-primary" onclick="saveEditTask()">Salvar Alterações</button></div>
   </div>
@@ -1906,11 +1913,13 @@ function getTipoClass(t){
 }
 function deadlineLabel(prazo, status){
   if(!prazo) return '';
+  const now = new Date();
+  const hoje = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const d = new Date(prazo+'T00:00:00');
-  const diff = Math.round((d-today)/(1000*60*60*24));
+  const diff = Math.round((d-hoje)/(1000*60*60*24));
   if(status==='concluida') return `<span class="deadline">Concluída</span>`;
-  if(diff<0) return `<span class="deadline overdue">⚠ Venceu há ${Math.abs(diff)}d</span>`;
-  if(diff===0) return `<span class="deadline soon">Vence hoje</span>`;
+  if(diff<0) return `<span class="deadline overdue" style="animation:piscar .8s infinite">🚨 Atrasada ${Math.abs(diff)}d</span>`;
+  if(diff===0) return `<span class="deadline soon" style="animation:piscar 1s infinite">⏰ Vence HOJE</span>`;
   if(diff===1) return `<span class="deadline soon">Vence amanhã</span>`;
   if(diff<=3) return `<span class="deadline soon">Em ${diff}d</span>`;
   return `<span class="deadline">${d.toLocaleDateString('pt-BR')}</span>`;
@@ -2054,16 +2063,13 @@ async function fbAdd(col, data){
 async function fbUpdate(col, fbId, data){
   if(!FIREBASE_ENABLED){
     const arr = col==='tasks'?tasks:col==='giaps'?giaps:col==='compras'?compras:col==='contratos'?contratos:col==='editais'?editais:[];
-    const idx = arr.findIndex(x=>x._fbId===fbId||String(x.id)===String(fbId));
+    const idx = arr.findIndex(x=>x._fbId===String(fbId)||String(x.id)===String(fbId));
     if(idx>=0) arr[idx]={...arr[idx],...data};
     saveLocal(); refreshAll(); return;
   }
   try{
-    // find doc id
-    const snap = await db.collection(col).where('_fbId','==',fbId).limit(1).get();
-    let docId = fbId;
-    if(!snap.empty) docId = snap.docs[0].id;
-    await db.collection(col).doc(docId).set({...data, _ts:Date.now()}, {merge:true});
+    // fbId IS the Firestore doc ID
+    await db.collection(col).doc(String(fbId)).set({...data, _ts:Date.now()}, {merge:true});
   }catch(e){ console.error('fbUpdate',e); showSyncStatus('erro ao atualizar',true); }
 }
 
@@ -2079,7 +2085,7 @@ async function fbDelete(col, fbId){
     saveLocal(); refreshAll(); return;
   }
   try{
-    await db.collection(col).doc(fbId).delete();
+    await db.collection(col).doc(String(fbId)).delete();
   }catch(e){ console.error('fbDelete',e); showSyncStatus('erro ao excluir',true); }
 }
 
@@ -2141,12 +2147,15 @@ function renderTaskTable(){
       <td style="padding:10px 14px"><span class="tag ${getTipoClass(t.tipo)}" style="font-size:10px;white-space:nowrap">${t.tipo||'—'}</span>${t.tipoOutro?`<div style="font-size:10px;color:var(--text-muted);margin-top:2px">${t.tipoOutro}</div>`:''}</td>
       <td style="padding:10px 14px"><span class="tag ${getPrioClass(t.prio)}">${getPrioLabel(t.prio)}</span></td>
       <td style="padding:10px 14px">${deadlineLabel(t.prazo,t.status)}</td>
-      <td style="padding:10px 14px"><span class="status ${getStatusClass(t.status)}">${getStatusLabel(t.status)}</span></td>
+      <td style="padding:10px 14px"><span class="status ${getStatusClass(t.status)}">${getStatusLabel(t.status)}</span>
+        ${t.conclusao?.providencia?`<div style="font-size:10px;color:var(--green-light);margin-top:4px;line-height:1.4;white-space:normal">✅ ${t.conclusao.providencia}</div>`:''}
+        ${t.conclusao?.dataDisplay?`<div style="font-size:10px;color:var(--text-faint);margin-top:2px">${t.conclusao.dataDisplay}</div>`:''}
+      </td>
       <td style="padding:8px 10px;white-space:nowrap">
         <div style="display:flex;gap:3px;align-items:center">
-          ${t.status!=='concluida'?`<button class="btn btn-ghost" style="padding:5px 8px;font-size:12px;color:var(--green-light);border-color:rgba(16,185,129,.2)" onclick="openChecklist(${t.id})" title="Concluir">✓</button>`:''}
-          <button class="btn btn-ghost" style="padding:5px 8px;font-size:12px;color:var(--accent-light);border-color:rgba(59,130,246,.2)" onclick="openEditTask(${t.id})" title="Editar">✎</button>
-          <button class="btn btn-ghost" style="padding:5px 8px;font-size:12px;color:var(--red-light);border-color:rgba(239,68,68,.2)" onclick="openDelete(${t.id})" title="Excluir">✕</button>
+          ${t.status!=='concluida'?`<button class="btn btn-ghost" style="padding:5px 8px;font-size:12px;color:var(--green-light);border-color:rgba(16,185,129,.2)" onclick="openChecklist('${t._fbId||t.id}')" title="Concluir">✓</button>`:''}
+          <button class="btn btn-ghost" style="padding:5px 8px;font-size:12px;color:var(--accent-light);border-color:rgba(59,130,246,.2)" onclick="openEditTask('${t._fbId||t.id}')" title="Editar">✎</button>
+          <button class="btn btn-ghost" style="padding:5px 8px;font-size:12px;color:var(--red-light);border-color:rgba(239,68,68,.2)" onclick="openDelete('${t._fbId||t.id}')" title="Excluir">✕</button>
         </div>
       </td>
     </tr>`).join('');
@@ -2186,7 +2195,7 @@ function renderKanban(){
     if(cnt)cnt.textContent=items.length;
     if(items.length===0){body.innerHTML='<div style="color:var(--text-faint);font-size:12px;text-align:center;padding:20px;opacity:.6">Nenhuma tarefa</div>';return;}
     body.innerHTML=items.map(t=>`
-      <div class="kanban-card" onclick="openEditTask(${t.id||0})" style="cursor:pointer">
+      <div class="kanban-card" onclick="openEditTask('${t._fbId||t.id||0}')" style="cursor:pointer">
         <div style="font-size:13px;font-weight:500;margin-bottom:8px;line-height:1.4">${t.nome}</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
           <span class="tag ${getPrioClass(t.prio)}" style="font-size:10px">${getPrioLabel(t.prio)}</span>
@@ -2199,7 +2208,7 @@ function renderKanban(){
           </div>
           ${deadlineLabel(t.prazo,t.status)}
         </div>
-        ${t.status!=='concluida'?`<div style="margin-top:8px"><button onclick="event.stopPropagation();openChecklist(${t.id||0})" class="btn btn-ghost" style="width:100%;padding:4px;font-size:11px;color:var(--green-light);border-color:rgba(16,185,129,.2)">✓ Concluir</button></div>`:''}
+        ${t.status!=='concluida'?`<div style="margin-top:8px"><button onclick="event.stopPropagation();openChecklist('${t._fbId||t.id||0}')" class="btn btn-ghost" style="width:100%;padding:4px;font-size:11px;color:var(--green-light);border-color:rgba(16,185,129,.2)">✓ Concluir</button></div>`:''}
       </div>`).join('');
   });
 }
@@ -2213,6 +2222,16 @@ function renderDashboard(){
   const setEl=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   // User-specific overdue for stat card
   const myAtrasadas = currentUser ? tasks.filter(t=>t.status==='atrasada'&&t.resp===currentUser).length : atrasadas;
+  // Banner de atrasadas nas páginas de tarefas
+  const atrasadasVisiveis = tasks.filter(t=>podeVerTarefa(t)&&t.status==='atrasada');
+  const venceHojeVisiveis = tasks.filter(t=>podeVerTarefa(t)&&t.status!=='concluida'&&t.prazo&&(()=>{const n=new Date(),h=new Date(n.getFullYear(),n.getMonth(),n.getDate());return Math.round((new Date(t.prazo+'T00:00:00')-h)/(86400000))===0;})());
+  const bannerHTML = (atrasadasVisiveis.length>0||venceHojeVisiveis.length>0) ? `
+    <div style="background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.4);border-radius:10px;padding:12px 18px;margin-bottom:14px;animation:piscar 1.2s infinite">
+      <div style="font-size:13px;font-weight:600;color:var(--red-light);margin-bottom:6px">🚨 Atenção necessária!</div>
+      ${atrasadasVisiveis.map(t=>`<div style="font-size:12px;color:#FCA5A5;margin-bottom:3px">• <b>${t.nome}</b> — ${t.resp} <span style="color:var(--red-light)">(Atrasada)</span></div>`).join('')}
+      ${venceHojeVisiveis.map(t=>`<div style="font-size:12px;color:#FCD34D;margin-bottom:3px">• <b>${t.nome}</b> — ${t.resp} <span style="color:#FCD34D">(Vence hoje!)</span></div>`).join('')}
+    </div>` : '';
+  ['banner-atrasadas-tarefas'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=bannerHTML;});
   setEl('stat-total',total);
   setEl('stat-atrasadas',myAtrasadas); setEl('stat-overdue',myAtrasadas);
   setEl('stat-concluidas',concluidas); setEl('stat-done',concluidas);
@@ -2316,7 +2335,7 @@ function renderHistory(){
 // ===== DELETE TASK =====
 window.openDelete = function openDelete(id){
   deleteTaskId = id;
-  const t = tasks.find(x=>x.id===id||x._fbId===String(id));
+  const t = tasks.find(x=>x._fbId===String(id)||String(x.id)===String(id));
   const el = document.getElementById('delete-task-name');
   if(el) el.textContent = t?t.nome:'';
   document.getElementById('del-motivo').value='';
@@ -2350,7 +2369,8 @@ window.saveTask = async function saveTask(){
   const tipoVal = document.getElementById('t-tipo')?.value;
   const tipoOutro = document.getElementById('t-tipo-outro')?.value||'';
   const tipo = tipoVal==='Outros'?(tipoOutro||'Outros'):tipoVal;
-  const status = prazo&&new Date(prazo+'T00:00:00')<today?'atrasada':'pendente';
+  const _now=new Date(),_hoje=new Date(_now.getFullYear(),_now.getMonth(),_now.getDate());
+  const status = prazo&&new Date(prazo+'T00:00:00')<_hoje?'atrasada':'pendente';
   const task={nome, desc:document.getElementById('t-desc')?.value||'',
     resp:document.getElementById('t-resp')?.value, prazo,
     prio:document.getElementById('t-prio')?.value,
@@ -2367,7 +2387,7 @@ window.saveTask = async function saveTask(){
 
 // ===== OPEN / EDIT TASK =====
 window.openEditTask = function openEditTask(id){
-  const t = tasks.find(x=>x.id===id||x._fbId===String(id));
+  const t = tasks.find(x=>x._fbId===String(id)||String(x.id)===String(id));
   if(!t) return;
   currentTaskId = id;
   const setVal=(eid,v)=>{const el=document.getElementById(eid);if(el)el.value=v||'';};
@@ -2376,6 +2396,17 @@ window.openEditTask = function openEditTask(id){
   setVal('et-giap',t.giap); setVal('et-status',t.status); setVal('et-tipo-outro',t.tipoOutro||'');
   const og=document.getElementById('et-tipo-outro-group');
   if(og) og.style.display=t.tipo==='Outros'?'block':'none';
+  // Mostra resposta de conclusão se existir
+  const cGroup = document.getElementById('et-conclusao-group');
+  const cText  = document.getElementById('et-conclusao-text');
+  const cData  = document.getElementById('et-conclusao-data');
+  if(cGroup && t.conclusao?.providencia){
+    cGroup.style.display = 'block';
+    if(cText) cText.textContent = t.conclusao.providencia;
+    if(cData) cData.textContent = t.conclusao.dataDisplay ? 'Concluída em: '+t.conclusao.dataDisplay : '';
+  } else if(cGroup){
+    cGroup.style.display = 'none';
+  }
   openModal('modal-edit-task');
 };
 window.saveEditTask = async function saveEditTask(){
@@ -2402,7 +2433,7 @@ window.saveEditTask = async function saveEditTask(){
 // ===== CHECKLIST / CONCLUDE =====
 window.openChecklist = function openChecklist(id){
   currentTaskId = id;
-  const t = tasks.find(x=>x.id===id||x._fbId===String(id));
+  const t = tasks.find(x=>x._fbId===String(id)||String(x.id)===String(id));
   if(!t) return;
   const el=document.getElementById('cl-task-name');
   if(el) el.textContent=t.nome;
@@ -2429,7 +2460,7 @@ window.toggleViaOutro = function toggleViaOutro(){
 window.concludeTask = async function concludeTask(){
   const prov=document.getElementById('cl-prov')?.value.trim();
   if(!prov){ showToast('⚠','Campo obrigatório','Descreva a providência tomada.','rgba(245,158,11,.4)'); return; }
-  const t=tasks.find(x=>x.id===currentTaskId||x._fbId===String(currentTaskId));
+  const t=tasks.find(x=>x._fbId===String(currentTaskId)||String(x.id)===String(currentTaskId));
   if(!t) return;
   const now=new Date(), dataISO=isoFmt(now), dataDisplay=now.toLocaleString('pt-BR');
   const via=document.getElementById('cl-via')?.value;
@@ -2878,8 +2909,10 @@ window.exportPDF = function exportPDF(section){
     'td{padding:6px 10px;border-bottom:1px solid #e5e7eb;vertical-align:top}',
     'tr:nth-child(even) td{background:#f8fafc}',
     '.red{color:#dc2626}.green{color:#059669}.amber{color:#d97706}',
-    '.no-print{display:none!important}',
-    '@media print{@page{margin:1.5cm;size:A4}body{padding:0}.no-print{display:none!important}}',
+    '.no-print{display:none!important}
+@keyframes piscar{0%,100%{opacity:1}50%{opacity:.3}}',
+    '@media print{@page{margin:1.5cm;size:A4}body{padding:0}.no-print{display:none!important}
+@keyframes piscar{0%,100%{opacity:1}50%{opacity:.3}}}',
   ].join('');
 
   const actionBar = '<div class="no-print" style="position:sticky;top:0;background:#0B1D3A;padding:10px 20px;display:flex;gap:12px;align-items:center;z-index:999;border-bottom:2px solid #2563EB">'
@@ -2936,7 +2969,8 @@ window.exportPDF = function exportPDF(section){
       '.totais{background:#f0f4ff;border:1px solid #c7d2fe;border-radius:4px;padding:8px 12px;margin-top:8px;font-size:10px}',
       '.totais b{color:#1e40af}',
       '.obs-row td{background:#faf9f7!important;color:#78716c;font-style:italic;font-size:8.5px;padding:3px 6px}',
-      '@media print{@page{margin:1cm;size:A4 landscape}body{padding:0}.no-print{display:none!important}}',
+      '@media print{@page{margin:1cm;size:A4 landscape}body{padding:0}.no-print{display:none!important}
+@keyframes piscar{0%,100%{opacity:1}50%{opacity:.3}}}',
     ].join('');
     const fmtR = v => v ? 'R$ '+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2}) : '—';
     const fmtD = v => v ? new Date(v+'T00:00').toLocaleDateString('pt-BR') : '—';
