@@ -252,6 +252,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);m
   <div id="login-step1" style="background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:28px 32px;width:480px;max-width:96vw;box-shadow:0 20px 60px rgba(0,0,0,.6)">
     <div style="font-size:13px;font-weight:500;margin-bottom:20px;text-align:center;color:var(--text-muted);letter-spacing:.4px;text-transform:uppercase">Quem é você?</div>
     <div id="login-step1-users" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px"></div>
+    <script>
+      // Tenta renderizar os botões assim que o container existe no DOM
+      (function tryRender(){
+        if(typeof renderLoginButtons === 'function'){
+          renderLoginButtons();
+        } else {
+          setTimeout(tryRender, 100);
+        }
+      })();
+    </script>
   </div>
 
   <!-- STEP 2: Inserir senha -->
@@ -1660,6 +1670,7 @@ let nextId = 1;
 let currentTaskId = null;
 let deleteTaskId = null;
 let currentFilter = 'todos';
+let _soMinhasTarefas = false; // true quando estiver na view 'Minhas Tarefas'
 let currentTipoFilter = null;
 
 // ===== GIAP DATA =====
@@ -1927,6 +1938,7 @@ function deadlineLabel(prazo, status){
 
 // ===== NAVIGATION =====
 window.showPage = function showPage(id, btn){
+  if(id==='tarefas') _soMinhasTarefas = false; // modo todas ao navegar pelo menu
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const pg = document.getElementById('page-'+id);
   if(pg) pg.classList.add('active');
@@ -2109,15 +2121,16 @@ async function fbSaveAll(col, arr){
 function renderTaskTable(){
   const tbody = document.getElementById('task-table-body');
   if(!tbody) return;
+  // Na página Tarefas principal: mostra todas. Em Minhas Tarefas: filtra por usuário
   let filtered = tasks.filter(t=>{
-    if(!podeVerTarefa(t)) return false;
+    if(_soMinhasTarefas && !podeVerTarefa(t)) return false;
     if(currentFilter!=='todos' && t.status!==currentFilter) return false;
     if(currentTipoFilter && t.tipo!==currentTipoFilter) return false;
     return true;
   });
   const label = document.getElementById('task-count-label');
   if(label) label.textContent = `${filtered.length} tarefa${filtered.length!==1?'s':''}`;
-  const visibleTasks = tasks.filter(podeVerTarefa);
+  const visibleTasks = _soMinhasTarefas ? tasks.filter(podeVerTarefa) : tasks;
   const fCounts={todos:visibleTasks.length,pendente:visibleTasks.filter(t=>t.status==='pendente').length,andamento:visibleTasks.filter(t=>t.status==='andamento').length,concluida:visibleTasks.filter(t=>t.status==='concluida').length,atrasada:visibleTasks.filter(t=>t.status==='atrasada').length};
   document.querySelectorAll('#task-filters .filter-btn').forEach(btn=>{
     const f=btn.dataset.filter;if(f&&fCounts[f]!==undefined){
@@ -2223,8 +2236,11 @@ function renderDashboard(){
   // User-specific overdue for stat card
   const myAtrasadas = currentUser ? tasks.filter(t=>t.status==='atrasada'&&t.resp===currentUser).length : atrasadas;
   // Banner de atrasadas nas páginas de tarefas
+  const _now2=new Date(), _hoje2=new Date(_now2.getFullYear(),_now2.getMonth(),_now2.getDate());
   const atrasadasVisiveis = tasks.filter(t=>podeVerTarefa(t)&&t.status==='atrasada');
-  const venceHojeVisiveis = tasks.filter(t=>podeVerTarefa(t)&&t.status!=='concluida'&&t.prazo&&(()=>{const n=new Date(),h=new Date(n.getFullYear(),n.getMonth(),n.getDate());return Math.round((new Date(t.prazo+'T00:00:00')-h)/(86400000))===0;})());
+  // vence hoje: exclui as que já estão na lista de atrasadas (evita duplicata)
+  const atrasadasIds = new Set(atrasadasVisiveis.map(t=>t._fbId||String(t.id)));
+  const venceHojeVisiveis = tasks.filter(t=>!atrasadasIds.has(t._fbId||String(t.id))&&podeVerTarefa(t)&&t.status!=='concluida'&&t.prazo&&Math.round((new Date(t.prazo+'T00:00:00')-_hoje2)/86400000)===0);
   const bannerHTML = (atrasadasVisiveis.length>0||venceHojeVisiveis.length>0) ? `
     <div style="background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.4);border-radius:10px;padding:12px 18px;margin-bottom:14px;animation:piscar 1.2s infinite">
       <div style="font-size:13px;font-weight:600;color:var(--red-light);margin-bottom:6px">🚨 Atenção necessária!</div>
@@ -2909,10 +2925,8 @@ window.exportPDF = function exportPDF(section){
     'td{padding:6px 10px;border-bottom:1px solid #e5e7eb;vertical-align:top}',
     'tr:nth-child(even) td{background:#f8fafc}',
     '.red{color:#dc2626}.green{color:#059669}.amber{color:#d97706}',
-    '.no-print{display:none!important}
-@keyframes piscar{0%,100%{opacity:1}50%{opacity:.3}}',
-    '@media print{@page{margin:1.5cm;size:A4}body{padding:0}.no-print{display:none!important}
-@keyframes piscar{0%,100%{opacity:1}50%{opacity:.3}}}',
+    '.no-print{display:none!important}',
+    '@media print{@page{margin:1.5cm;size:A4}body{padding:0}.no-print{display:none!important}}',
   ].join('');
 
   const actionBar = '<div class="no-print" style="position:sticky;top:0;background:#0B1D3A;padding:10px 20px;display:flex;gap:12px;align-items:center;z-index:999;border-bottom:2px solid #2563EB">'
@@ -2969,8 +2983,7 @@ window.exportPDF = function exportPDF(section){
       '.totais{background:#f0f4ff;border:1px solid #c7d2fe;border-radius:4px;padding:8px 12px;margin-top:8px;font-size:10px}',
       '.totais b{color:#1e40af}',
       '.obs-row td{background:#faf9f7!important;color:#78716c;font-style:italic;font-size:8.5px;padding:3px 6px}',
-      '@media print{@page{margin:1cm;size:A4 landscape}body{padding:0}.no-print{display:none!important}
-@keyframes piscar{0%,100%{opacity:1}50%{opacity:.3}}}',
+      '@media print{@page{margin:1cm;size:A4 landscape}body{padding:0}.no-print{display:none!important}}',
     ].join('');
     const fmtR = v => v ? 'R$ '+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2}) : '—';
     const fmtD = v => v ? new Date(v+'T00:00').toLocaleDateString('pt-BR') : '—';
@@ -3242,8 +3255,12 @@ window.deleteDFD = async function deleteDFD(id){
 // Initialize login screen and selects on page load
 (function initDynamic(){
   function init(){
+    // Tenta renderizar imediatamente
     renderLoginButtons();
     populateRespSelects();
+    // E tenta de novo após 500ms e 1500ms para garantir
+    setTimeout(function(){ renderLoginButtons(); populateRespSelects(); }, 500);
+    setTimeout(function(){ renderLoginButtons(); populateRespSelects(); }, 1500);
   }
   if(document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', init);
@@ -3313,6 +3330,7 @@ function updateMyTasksBadge(){
   badge.textContent=myAll;badge.style.background=myOver>0?'var(--red)':'var(--amber)';
 }
 window.showMyTasks = function showMyTasks(btn){
+  _soMinhasTarefas = true;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const pg=document.getElementById('page-tarefas');if(pg)pg.classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
